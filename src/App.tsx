@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { BuilderProvider, useBuilder } from './context/BuilderContext';
 import { PageShell } from './components/layout/PageShell';
