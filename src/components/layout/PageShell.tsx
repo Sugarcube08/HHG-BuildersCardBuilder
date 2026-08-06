@@ -21,11 +21,10 @@ export const PageShell: React.FC<PageShellProps> = ({ children }) => {
       <main className="flex-1 relative overflow-hidden py-8 sm:py-12 px-4 sm:px-6">
         {/* Ambient Background Sunrise Illustration */}
         <div className="absolute top-0 right-0 -mr-24 -mt-20 w-96 h-96 opacity-10 pointer-events-none rounded-full overflow-hidden blur-sm">
-          <img src={sunriseBg} alt="Sunrise Artwork" className="w-full h-full object-cover" />
+          <img src={typeof sunriseBg === 'string' ? sunriseBg : sunriseBg.src} alt="Sunrise Artwork" className="w-full h-full object-cover" />
         </div>
-
-        <div className="absolute bottom-10 left-0 -ml-24 w-80 h-80 opacity-10 pointer-events-none rounded-full overflow-hidden blur-sm">
-          <img src={sunriseBg} alt="Sunrise Artwork" className="w-full h-full object-cover" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] opacity-15 pointer-events-none mix-blend-screen scale-x-[-1]">
+          <img src={typeof sunriseBg === 'string' ? sunriseBg : sunriseBg.src} alt="Sunrise Artwork" className="w-full h-full object-cover" />
         </div>
 
         {/* Content Container */}

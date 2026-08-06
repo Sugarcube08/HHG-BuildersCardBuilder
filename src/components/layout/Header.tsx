@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Badge } from '../common/Badge';
@@ -21,7 +23,7 @@ export const Header: React.FC = () => {
         >
           <div className="relative bg-white/10 p-1.5 rounded-xl border-2 border-white/20 group-hover:border-[#FF2E93] transition-colors">
             <img
-              src={hackerHouseLogo}
+              src={typeof hackerHouseLogo === 'string' ? hackerHouseLogo : hackerHouseLogo.src}
               alt="Hacker House Logo"
               className="h-9 sm:h-10 w-auto object-contain"
             />

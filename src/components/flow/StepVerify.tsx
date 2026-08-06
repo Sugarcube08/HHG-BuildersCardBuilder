@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useRef, useState, useEffect } from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';

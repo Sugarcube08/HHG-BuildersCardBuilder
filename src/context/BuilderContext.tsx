@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import type {
   AppStep,

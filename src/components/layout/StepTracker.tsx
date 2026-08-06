@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { APP_STEPS, STEP_ORDER } from '../../constants/steps';

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';
@@ -47,7 +49,7 @@ export const StepLanding: React.FC = () => {
       <Card variant="emerald" shadow="yellow" className="w-full max-w-4xl overflow-hidden relative p-8 sm:p-10">
         {/* Background Sunrise Illustration Overlay */}
         <div className="absolute -right-12 -bottom-12 opacity-25 pointer-events-none w-80 h-80">
-          <img src={sunriseArt} alt="Goa Sunrise Artwork" className="w-full h-full object-cover" />
+          <img src={typeof sunriseArt === 'string' ? sunriseArt : sunriseArt.src} alt="Goa Sunrise Artwork" className="w-full h-full object-cover" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10 text-left">
@@ -77,7 +79,7 @@ export const StepLanding: React.FC = () => {
               <div className="bg-[#FAF7F2] p-5 rounded-2xl border-3 border-[#0F172A] hh-shadow-pink max-w-xs transform group-hover:-rotate-1 transition-all duration-300">
                 <div className="relative rounded-xl overflow-hidden border-2 border-[#0F172A]">
                   <img
-                    src={hackersArt}
+                    src={typeof hackersArt === 'string' ? hackersArt : hackersArt.src}
                     alt="Hacker House Workspace Illustration"
                     className="w-full h-48 object-cover"
                   />

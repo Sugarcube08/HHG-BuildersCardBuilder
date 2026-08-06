@@ -9,7 +9,7 @@ export const Footer: React.FC = () => {
       {/* Decorative Palm Trees Background Image */}
       <div className="absolute inset-0 opacity-15 pointer-events-none mix-blend-overlay flex justify-center items-end">
         <img
-          src={footerTrees}
+          src={typeof footerTrees === 'string' ? footerTrees : footerTrees.src}
           alt="Goa Trees Decoration"
           className="w-full max-w-7xl object-cover object-bottom h-48"
         />
