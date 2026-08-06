@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const baseUrlStr = getDynamicBaseUrl();
   const baseUrl = new URL(baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`);
   const canonicalUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/d/${rawPayload}`;
+  const ogImageUrl = `${canonicalUrl}/opengraph-image`;
 
   const title = `Hacker House Goa 2026 — ${builderName} (${builderRole})`;
   const description = `Official Hacker House Goa 2026 Digital Identity Credential for ${builderName} [ID: ${builderId}].`;
@@ -47,11 +48,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       siteName: 'Hacker House Goa 2026',
       locale: 'en_US',
       type: 'website',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `Hacker House Goa 2026 Builder Passport — ${builderName}`,
+          type: 'image/png',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [ogImageUrl],
     },
   };
 }

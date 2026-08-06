@@ -4,11 +4,11 @@ import { generateBuilderId } from '../qr/builderId';
 
 export interface BuilderPayloadSchema {
   v: 1;
-  id: string;
-  name: string;
-  role: string;
-  tagline: string;
-  stack: string;
+  i: string; // id
+  n: string; // name
+  r: string; // role
+  g: string; // tagline
+  s: string; // stack
   ts: number;
   src?: string;
   meta?: {
@@ -20,7 +20,7 @@ export interface BuilderPayloadSchema {
 }
 
 /**
- * Creates a versioned BuilderPayloadSchema object from form data.
+ * Creates a compact, minified BuilderPayloadSchema object from form data.
  */
 export const createBuilderPayload = (
   details: BuilderDetailsFormData,
@@ -30,11 +30,11 @@ export const createBuilderPayload = (
 
   const payload: BuilderPayloadSchema = {
     v: 1,
-    id,
-    name: details.fullName,
-    role: details.role,
-    tagline: details.tagline,
-    stack: details.techStack || '',
+    i: id,
+    n: details.fullName,
+    r: details.role,
+    g: details.tagline,
+    s: details.techStack || '',
     ts: Date.now(),
     src: 'hh-goa-2026',
   };
@@ -96,33 +96,42 @@ export const decodeBuilderPayload = (encodedStr: string): unknown => {
 
 /**
  * Validates whether an unparsed object conforms to the BuilderPayloadSchema.
+ * Handles both minified schema (i, n, r, g, s) and legacy schema (id, name, role, tagline, stack).
  */
-export const validatePayload = (data: unknown): BuilderPayloadSchema | null => {
+export const validatePayload = (data: unknown): {
+  v: 1;
+  id: string;
+  name: string;
+  role: string;
+  tagline: string;
+  stack: string;
+  ts: number;
+  meta?: { w: number; h: number; r: number; o: string };
+} | null => {
   if (!data || typeof data !== 'object') {
     return null;
   }
 
   const obj = data as Record<string, unknown>;
 
-  if (
-    obj.v !== 1 ||
-    typeof obj.id !== 'string' ||
-    typeof obj.name !== 'string' ||
-    typeof obj.role !== 'string' ||
-    typeof obj.tagline !== 'string'
-  ) {
+  const id = (obj.i || obj.id) as string;
+  const name = (obj.n || obj.name) as string;
+  const role = (obj.r || obj.role) as string;
+  const tagline = (obj.g || obj.tagline) as string;
+  const stack = (obj.s || obj.stack) as string;
+
+  if (!id || !name || !role || !tagline) {
     return null;
   }
 
   return {
     v: 1,
-    id: obj.id,
-    name: obj.name,
-    role: obj.role,
-    tagline: obj.tagline,
-    stack: typeof obj.stack === 'string' ? obj.stack : '',
+    id,
+    name,
+    role,
+    tagline,
+    stack: stack || '',
     ts: typeof obj.ts === 'number' ? obj.ts : Date.now(),
-    src: typeof obj.src === 'string' ? obj.src : 'hh-goa-2026',
     meta:
       obj.meta && typeof obj.meta === 'object'
         ? {
