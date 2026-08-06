@@ -12,11 +12,11 @@ export const shareToX = (
   const roleStr = role || 'Full Stack Developer';
   const idStr = builderId ? ` (${builderId})` : '';
 
-  const caption = `I just generated my official Hacker House Goa 2026 Digital Builder Passport! 🚀\n\nVerified Builder: ${nameStr}${idStr}\nRole: ${roleStr}\n\n#FrameInGoa #HHGoa2026 #HackerHouseGoa`;
-  
+  const caption = `🚀 I just generated my official Hacker House Goa 2026 Digital Builder Passport!\n\nVerified Builder: ${nameStr}${idStr}\nRole: ${roleStr}\n\n#FrameInGoa #HHGoa2026 #HackerHouseGoa\n\n`;
+
   const targetUrl = shareUrl || (typeof window !== 'undefined' ? window.location.href : '');
-  
-  const intentUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(caption)}&url=${encodeURIComponent(targetUrl)}`;
-  
+
+  const intentUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(caption)}&url=${encodeURIComponent(targetUrl)}`;
+
   window.open(intentUrl, '_blank', 'noopener,noreferrer');
 };
