@@ -5,6 +5,7 @@ import { StepLanding } from './components/flow/StepLanding';
 import { StepUpload } from './components/flow/StepUpload';
 import { StepDetails } from './components/flow/StepDetails';
 import { StepPreview } from './components/flow/StepPreview';
+import { StepVerify } from './components/flow/StepVerify';
 
 const FlowRenderer: React.FC = () => {
   const { currentStep } = useBuilder();
@@ -20,6 +21,8 @@ const FlowRenderer: React.FC = () => {
     case 'DOWNLOAD':
     case 'SHARE':
       return <StepPreview />;
+    case 'VERIFY':
+      return <StepVerify />;
     default:
       return <StepLanding />;
   }

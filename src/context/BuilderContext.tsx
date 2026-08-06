@@ -56,7 +56,7 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [generatedCard, setGeneratedCard] = useState<GeneratedCardData>(initialGeneratedCard);
   const [isRestoredFromUrl, setIsRestoredFromUrl] = useState<boolean>(false);
 
-  // Parse URL on startup for ?builder=<base64> parameter
+  // Parse URL on startup for /verify/:builderId or ?builder=<base64> parameter
   useEffect(() => {
     const restoredPayload = parseBuilderUrlParam(window.location.search);
     if (restoredPayload) {
@@ -80,7 +80,13 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
       }
 
       setIsRestoredFromUrl(true);
-      setCurrentStep('PREVIEW');
+      
+      // If the URL contains /verify/ or ?builder=, jump directly to VERIFY step
+      if (window.location.pathname.includes('/verify') || window.location.search.includes('builder=')) {
+        setCurrentStep('VERIFY');
+      } else {
+        setCurrentStep('PREVIEW');
+      }
     }
   }, []);
 
@@ -96,6 +102,8 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const qrUrl = useMemo(() => {
     return generateBuilderUrl(builderData, imageData.meta);
   }, [builderData, imageData.meta]);
+
+  const shareUrl = qrUrl;
 
   const setStep = (step: AppStep) => {
     setCurrentStep(step);
@@ -118,7 +126,6 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const setUploadedFile = async (file: File) => {
     try {
-      // Read file into Base64 Data URL to guarantee zero-CORS DOM export compatibility
       const previewUrl = await fileToDataUrl(file);
       const meta = await analyzeImage(file);
 
@@ -171,6 +178,7 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
         setGeneratedCard,
         builderId,
         qrUrl,
+        shareUrl,
         isRestoredFromUrl,
         resetFlow,
       }}

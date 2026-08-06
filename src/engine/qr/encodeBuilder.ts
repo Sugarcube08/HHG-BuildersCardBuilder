@@ -53,22 +53,24 @@ export const encodePayloadToBase64 = (payload: BuilderPayloadSchema): string => 
  * supporting Vercel, Netlify, GitHub Pages, or custom domain deployments.
  */
 export const getDynamicBaseUrl = (): string => {
-  // Check optional environment variable override if defined
   const envUrl = import.meta.env.VITE_PUBLIC_URL || import.meta.env.VITE_BASE_URL;
   if (envUrl && typeof envUrl === 'string' && envUrl.trim().length > 0) {
-    return envUrl.trim();
+    let clean = envUrl.trim();
+    if (!clean.endsWith('/')) clean += '/';
+    return clean;
   }
 
-  // Dynamically resolve origin + pathname in browser
   if (typeof window !== 'undefined' && window.location) {
-    return window.location.origin + window.location.pathname;
+    const origin = window.location.origin;
+    return origin.endsWith('/') ? origin : `${origin}/`;
   }
 
-  return '';
+  return 'https://hackerhousegoa2026.dev/';
 };
 
 /**
- * Generates the full builder restoration URL encoded with ?builder=<base64_payload>.
+ * Generates the canonical Builder Public Verification & Restoration Share URL.
+ * Example: https://hhgoa.vercel.app/verify/HH26-4A8F92C1?builder=<base64>
  */
 export const generateBuilderUrl = (
   details: BuilderDetailsFormData,
@@ -78,7 +80,7 @@ export const generateBuilderUrl = (
   const baseUrl = customBaseUrl || getDynamicBaseUrl();
   const payload = createBuilderPayload(details, imageMeta);
   const encoded = encodePayloadToBase64(payload);
-  
-  const separator = baseUrl.includes('?') ? '&' : '?';
-  return `${baseUrl}${separator}builder=${encoded}`;
+
+  const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
+  return `${cleanBase}verify/${payload.id}?builder=${encoded}`;
 };

@@ -5,6 +5,7 @@ export type AppStep =
   | 'UPLOAD'
   | 'DETAILS'
   | 'PREVIEW'
+  | 'VERIFY'
   | 'DOWNLOAD'
   | 'SHARE';
 
@@ -52,6 +53,7 @@ export interface BuilderContextType {
 
   builderId: string;
   qrUrl: string;
+  shareUrl: string;
   isRestoredFromUrl: boolean;
 
   resetFlow: () => void;
