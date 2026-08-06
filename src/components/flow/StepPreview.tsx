@@ -1,29 +1,36 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { downloadImage } from '../../engine/export/download';
 import { shareToX } from '../../engine/export/share';
+import { generateQrDataUrl } from '../../engine/qr/generateQr';
 import hackerHouseLogo from '../../assets/logos/Hacker house.png';
 import footerTrees from '../../assets/decorations/footer trees.png';
 import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
-import { Download, Share2, Edit3, CheckCircle2, Shield, QrCode } from 'lucide-react';
+import { Download, Share2, Edit3, CheckCircle2, Shield } from 'lucide-react';
 
 export const StepPreview: React.FC = () => {
-  const { builderData, imageData, setStep, generatedCard } = useBuilder();
+  const { builderData, imageData, setStep, generatedCard, builderId, qrUrl, isRestoredFromUrl } =
+    useBuilder();
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
-  // Generate deterministic Builder ID e.g. HH-26-8A31F4
-  const builderId = useMemo(() => {
-    const raw = `${builderData.fullName}-${builderData.role}-${builderData.tagline}`;
-    let hash = 0;
-    for (let i = 0; i < raw.length; i++) {
-      hash = (hash << 5) - hash + raw.charCodeAt(i);
-      hash |= 0;
-    }
-    const hex = Math.abs(hash).toString(16).toUpperCase().padStart(6, '0').slice(0, 6);
-    return `HH-26-${hex}`;
-  }, [builderData]);
+  // Generate crisp QR code Data URL whenever qrUrl updates
+  useEffect(() => {
+    let isMounted = true;
+    generateQrDataUrl(qrUrl, { width: 120 })
+      .then((dataUrl) => {
+        if (isMounted) {
+          setQrDataUrl(dataUrl);
+        }
+      })
+      .catch((err) => console.error('Failed to generate QR data URL:', err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [qrUrl]);
 
   const handleDownload = () => {
     if (generatedCard.blob || generatedCard.dataUrl) {
@@ -45,14 +52,21 @@ export const StepPreview: React.FC = () => {
     <div className="flex flex-col items-center gap-8 max-w-3xl mx-auto text-center">
       {/* Title & Instructions */}
       <div className="flex flex-col gap-2">
-        <Badge variant="green" className="w-fit mx-auto">
-          Step 4 of 6 • Preview
-        </Badge>
+        <div className="flex items-center justify-center gap-2">
+          <Badge variant="green" className="w-fit">
+            Step 4 of 6 • Preview
+          </Badge>
+          {isRestoredFromUrl && (
+            <Badge variant="pink" icon={<CheckCircle2 className="w-3.5 h-3.5" />}>
+              ✓ Verified Builder Restored
+            </Badge>
+          )}
+        </div>
         <h2 className="text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight">
           Your HH Goa 2026 Builder Identity
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-lg">
-          Official Digital Builder Identity generated with zero photo cropping.
+          Official Digital Builder Identity generated with encoded QR restoration URL.
         </p>
       </div>
 
@@ -124,12 +138,16 @@ export const StepPreview: React.FC = () => {
           {/* Card Footer Branding with QR Code Box & Verification */}
           <div className="w-full flex items-center justify-between border-t border-emerald-800/80 pt-3.5 relative z-10 text-[11px] font-mono text-emerald-300">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-white p-1 border border-[#0F172A] flex items-center justify-center text-[#0F172A]">
-                <QrCode className="w-6 h-6" />
+              <div className="w-10 h-10 rounded-lg bg-white p-1 border border-[#0F172A] flex items-center justify-center text-[#0F172A] overflow-hidden">
+                {qrDataUrl ? (
+                  <img src={qrDataUrl} alt="Builder Identity QR Code" className="w-full h-full object-contain" />
+                ) : (
+                  <span className="text-[9px]">QR</span>
+                )}
               </div>
               <div className="flex flex-col text-left text-[10px]">
                 <span className="font-bold text-white flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400 inline" /> Verified Card
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400 inline" /> Verified Builder
                 </span>
                 <span className="text-emerald-300/80">#FrameInGoa</span>
               </div>
@@ -176,7 +194,11 @@ export const StepPreview: React.FC = () => {
       {/* Verification Notice */}
       <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2.5 py-3 px-4">
         <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-        <span>Official Digital Builder Identity framed for Hacker House Goa 2026.</span>
+        <span>
+          {isRestoredFromUrl
+            ? '✓ Verified Builder Identity restored from scannable QR payload.'
+            : 'Official Digital Builder Identity generated with scannable QR payload.'}
+        </span>
       </Card>
     </div>
   );

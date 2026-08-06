@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import type {
   AppStep,
   BuilderContextType,
@@ -9,6 +9,9 @@ import type {
 import { STEP_ORDER } from '../constants/steps';
 import { analyzeImage } from '../engine/image/aspectRatio';
 import { generateTagline } from '../engine/theme/cardComposer';
+import { generateBuilderId } from '../engine/qr/builderId';
+import { generateBuilderUrl } from '../engine/qr/encodeBuilder';
+import { parseBuilderUrlParam } from '../engine/qr/decodeBuilder';
 
 const initialImageData: ImageUploadData = {
   file: null,
@@ -37,6 +40,48 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [imageData, setImageData] = useState<ImageUploadData>(initialImageData);
   const [builderData, setBuilderData] = useState<BuilderDetailsFormData>(initialBuilderData);
   const [generatedCard, setGeneratedCard] = useState<GeneratedCardData>(initialGeneratedCard);
+  const [isRestoredFromUrl, setIsRestoredFromUrl] = useState<boolean>(false);
+
+  // Parse URL on startup for ?builder=<base64> parameter
+  useEffect(() => {
+    const restoredPayload = parseBuilderUrlParam(window.location.search);
+    if (restoredPayload) {
+      setBuilderData({
+        fullName: restoredPayload.name,
+        role: restoredPayload.role,
+        tagline: restoredPayload.tagline,
+        techStack: restoredPayload.stack || '',
+      });
+
+      if (restoredPayload.meta) {
+        setImageData((prev) => ({
+          ...prev,
+          meta: {
+            width: restoredPayload.meta!.w,
+            height: restoredPayload.meta!.h,
+            ratio: restoredPayload.meta!.r,
+            orientation: restoredPayload.meta!.o,
+          },
+        }));
+      }
+
+      setIsRestoredFromUrl(true);
+      setCurrentStep('PREVIEW');
+    }
+  }, []);
+
+  const builderId = useMemo(() => {
+    return generateBuilderId(
+      builderData.fullName,
+      builderData.role,
+      builderData.tagline,
+      builderData.techStack
+    );
+  }, [builderData]);
+
+  const qrUrl = useMemo(() => {
+    return generateBuilderUrl(builderData, imageData.meta);
+  }, [builderData, imageData.meta]);
 
   const setStep = (step: AppStep) => {
     setCurrentStep(step);
@@ -88,6 +133,11 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
     clearImage();
     setBuilderData(initialBuilderData);
     setGeneratedCard(initialGeneratedCard);
+    setIsRestoredFromUrl(false);
+    // Clear URL parameters cleanly without page refresh
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
     setCurrentStep('LANDING');
   };
 
@@ -106,6 +156,9 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
         updateBuilderDetails,
         generatedCard,
         setGeneratedCard,
+        builderId,
+        qrUrl,
+        isRestoredFromUrl,
         resetFlow,
       }}
     >

@@ -45,5 +45,9 @@ export interface BuilderContextType {
   generatedCard: GeneratedCardData;
   setGeneratedCard: React.Dispatch<React.SetStateAction<GeneratedCardData>>;
 
+  builderId: string;
+  qrUrl: string;
+  isRestoredFromUrl: boolean;
+
   resetFlow: () => void;
 }

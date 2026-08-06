@@ -1,23 +1,25 @@
 import type { ImageMetadata } from '../image/aspectRatio';
 import { calculateCardLayout } from '../layout/layoutCalculator';
 import { getCardTheme } from '../theme/cardComposer';
+import { renderQrToCanvas } from '../qr/generateQr';
 import type { BuilderDetailsFormData } from '../../types/builder';
 
 export interface ComposeCardParams {
   imageElement: HTMLImageElement | null;
   imageMeta: ImageMetadata | null;
   builderDetails: BuilderDetailsFormData;
+  qrUrl?: string;
   targetSize?: number;
 }
 
 /**
  * Pure function that composes a high-res 1:1 Builder Card onto an HTML5 Canvas using
- * the Layout Engine and Card Composer, returning a Blob and Data URL.
+ * the Layout Engine, Card Composer, and QR Engine, returning a Blob and Data URL.
  */
 export const composeBuilderCard = async (
   params: ComposeCardParams
 ): Promise<{ blob: Blob; dataUrl: string }> => {
-  const { imageElement, imageMeta, builderDetails, targetSize = 1080 } = params;
+  const { imageElement, imageMeta, builderDetails, qrUrl, targetSize = 1080 } = params;
   const theme = getCardTheme();
   const layout = calculateCardLayout(imageMeta, targetSize);
 
@@ -107,14 +109,31 @@ export const composeBuilderCard = async (
   ctx.font = 'italic 24px "Inter", sans-serif';
   ctx.fillText(builderDetails.tagline || '"Building in Public"', targetSize / 2, taglineY);
 
-  // 6. Draw Footer Branding
+  // 6. Draw QR Code & Footer Branding
+  if (qrUrl) {
+    const qrSize = 96;
+    const qrX = layout.footer.hashtagX;
+    const qrY = targetSize - qrSize - 32;
+
+    // Draw QR white background card
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
+    ctx.strokeStyle = theme.borderColor;
+    ctx.lineWidth = 3;
+    ctx.strokeRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
+
+    try {
+      await renderQrToCanvas(ctx, qrUrl, qrX, qrY, qrSize);
+    } catch (err) {
+      console.warn('QR rendering to canvas warning:', err);
+    }
+  }
+
+  // Footer Text
   ctx.fillStyle = '#6EE7B7';
   ctx.font = 'bold 20px "JetBrains Mono", monospace';
-  ctx.textAlign = 'left';
-  ctx.fillText('OFFICIAL BUILDER CARD', layout.footer.hashtagX, layout.footer.y);
-
   ctx.textAlign = 'right';
-  ctx.fillText('GOA, INDIA', layout.footer.badgeX, layout.footer.y);
+  ctx.fillText('VERIFIED BUILDER CARD • GOA 2026', layout.footer.badgeX, layout.footer.y);
 
   // Export Canvas to Blob & Data URL
   return new Promise((resolve, reject) => {
