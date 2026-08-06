@@ -49,14 +49,36 @@ export const encodePayloadToBase64 = (payload: BuilderPayloadSchema): string => 
 };
 
 /**
+ * Gets the current base URL dynamically from the browser environment,
+ * supporting Vercel, Netlify, GitHub Pages, or custom domain deployments.
+ */
+export const getDynamicBaseUrl = (): string => {
+  // Check optional environment variable override if defined
+  const envUrl = import.meta.env.VITE_PUBLIC_URL || import.meta.env.VITE_BASE_URL;
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim().length > 0) {
+    return envUrl.trim();
+  }
+
+  // Dynamically resolve origin + pathname in browser
+  if (typeof window !== 'undefined' && window.location) {
+    return window.location.origin + window.location.pathname;
+  }
+
+  return '';
+};
+
+/**
  * Generates the full builder restoration URL encoded with ?builder=<base64_payload>.
  */
 export const generateBuilderUrl = (
   details: BuilderDetailsFormData,
   imageMeta?: ImageMetadata | null,
-  baseUrl: string = window.location.origin
+  customBaseUrl?: string
 ): string => {
+  const baseUrl = customBaseUrl || getDynamicBaseUrl();
   const payload = createBuilderPayload(details, imageMeta);
   const encoded = encodePayloadToBase64(payload);
-  return `${baseUrl}?builder=${encoded}`;
+  
+  const separator = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${separator}builder=${encoded}`;
 };
