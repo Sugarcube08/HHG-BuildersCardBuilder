@@ -16,7 +16,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full flex flex-col gap-1.5 text-left">
         {label && (
-          <label htmlFor={inputId} className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+          <label htmlFor={inputId} className="text-xs font-extrabold uppercase tracking-wider text-[#0F172A]">
             {label}
           </label>
         )}
@@ -31,9 +31,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             className={twMerge(
               clsx(
-                'w-full bg-white text-[#0F172A] placeholder-slate-400 font-medium text-sm rounded-xl border-2 border-[#0F172A] py-2.5 px-3.5 transition-all outline-none focus:ring-2 focus:ring-[#FF2E93] focus:border-[#0F172A] hh-shadow-sm disabled:bg-slate-100 disabled:opacity-75',
+                'w-full bg-white text-[#0F172A] placeholder-slate-400 font-medium text-sm rounded-xl border-2.5 border-[#0F172A] py-3 px-3.5 transition-all outline-none hh-shadow-sm focus:border-[#FF2E93] focus:bg-white disabled:bg-slate-100 disabled:opacity-75',
                 leftIcon && 'pl-10',
-                error && 'border-rose-600 focus:ring-rose-500',
+                error && 'border-rose-600 focus:border-rose-600 bg-rose-50/20',
                 className
               )
             )}
@@ -41,11 +41,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           />
         </div>
         {error ? (
-          <p className="text-xs font-semibold text-rose-600 flex items-center gap-1">
-            <span>⚠️</span> {error}
+          <p role="alert" className="text-xs font-bold text-rose-600 flex items-center gap-1 mt-0.5">
+            <span aria-hidden="true">⚠️</span> {error}
           </p>
         ) : helperText ? (
-          <p className="text-xs text-slate-500">{helperText}</p>
+          <p className="text-xs text-slate-500 font-medium">{helperText}</p>
         ) : null}
       </div>
     );

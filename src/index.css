@@ -23,19 +23,25 @@
     min-height: 100vh;
     overflow-x: hidden;
   }
+
+  /* Accessible focus indicator across controls */
+  *:focus-visible {
+    outline: 3px solid #ff2e93 !important;
+    outline-offset: 2px !important;
+  }
 }
 
 /* Custom retro-brutalist / pop-shadow utilities matching HH Goa visual language */
 .hh-shadow-sm {
-  box-shadow: 2px 2px 0px 0px rgba(15, 23, 42, 1);
+  box-shadow: 2px 2px 0px 0px #0f172a;
 }
 
 .hh-shadow-md {
-  box-shadow: 4px 4px 0px 0px rgba(15, 23, 42, 1);
+  box-shadow: 4px 4px 0px 0px #0f172a;
 }
 
 .hh-shadow-lg {
-  box-shadow: 6px 6px 0px 0px rgba(15, 23, 42, 1);
+  box-shadow: 6px 6px 0px 0px #0f172a;
 }
 
 .hh-shadow-pink {
@@ -48,9 +54,9 @@
 
 .hh-card {
   background-color: #ffffff;
-  border: 2px solid #0f172a;
-  border-radius: 1rem;
-  box-shadow: 4px 4px 0px 0px rgba(15, 23, 42, 1);
+  border: 2.5px solid #0f172a;
+  border-radius: 1.25rem;
+  box-shadow: 4px 4px 0px 0px #0f172a;
 }
 
 .hh-badge {
@@ -59,9 +65,27 @@
   gap: 0.375rem;
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border: 1.5px solid #0f172a;
+}
+
+/* Floating animation for decorative assets */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

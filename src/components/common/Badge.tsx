@@ -27,13 +27,13 @@ export const Badge: React.FC<BadgeProps> = ({
     <span
       className={twMerge(
         clsx(
-          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border-1.5 shadow-sm',
+          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider border-2 shadow-xs select-none',
           variants[variant],
           className
         )
       )}
     >
-      {icon && <span className="inline-flex shrink-0">{icon}</span>}
+      {icon && <span className="inline-flex shrink-0" aria-hidden="true">{icon}</span>}
       {children}
     </span>
   );

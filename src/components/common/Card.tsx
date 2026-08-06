@@ -15,11 +15,11 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variants = {
-    default: 'bg-white text-[#0F172A] border-2 border-[#0F172A]',
-    emerald: 'bg-[#0B3B2B] text-white border-2 border-[#0F172A]',
-    pink: 'bg-[#FF2E93] text-white border-2 border-[#0F172A]',
-    sand: 'bg-[#FAF7F2] text-[#0F172A] border-2 border-[#0F172A]',
-    glass: 'bg-white/80 backdrop-blur-md text-[#0F172A] border-2 border-[#0F172A]',
+    default: 'bg-white text-[#0F172A] border-2.5 border-[#0F172A]',
+    emerald: 'bg-[#0B3B2B] text-white border-2.5 border-[#0F172A]',
+    pink: 'bg-[#FF2E93] text-white border-2.5 border-[#0F172A]',
+    sand: 'bg-[#FAF7F2] text-[#0F172A] border-2.5 border-[#0F172A]',
+    glass: 'bg-white/85 backdrop-blur-md text-[#0F172A] border-2.5 border-[#0F172A]',
   };
 
   const shadows = {
@@ -34,7 +34,7 @@ export const Card: React.FC<CardProps> = ({
   return (
     <div
       className={twMerge(
-        clsx('rounded-2xl p-6 transition-all', variants[variant], shadows[shadow], className)
+        clsx('rounded-2xl p-6 sm:p-8 transition-all duration-200', variants[variant], shadows[shadow], className)
       )}
       {...props}
     >

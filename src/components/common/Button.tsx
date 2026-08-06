@@ -19,32 +19,34 @@ export const Button: React.FC<ButtonProps> = ({
   rightIcon,
   className,
   disabled,
+  type = 'button',
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-bold tracking-wide transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 active:translate-x-0.5 active:translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none select-none rounded-xl';
+    'inline-flex items-center justify-center font-extrabold tracking-wide transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none select-none rounded-xl border-2.5 border-[#0F172A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none';
 
   const variants = {
     primary:
-      'bg-[#0B3B2B] text-white hover:bg-[#12543E] border-2 border-[#0F172A] hh-shadow-md focus:ring-[#0B3B2B]',
+      'bg-[#0B3B2B] text-white hover:bg-[#12543E] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     accent:
-      'bg-[#FF2E93] text-white hover:bg-[#E01F7D] border-2 border-[#0F172A] hh-shadow-md focus:ring-[#FF2E93]',
+      'bg-[#FF2E93] text-white hover:bg-[#E01F7D] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     secondary:
-      'bg-[#FFB800] text-[#0F172A] hover:bg-[#E5A400] border-2 border-[#0F172A] hh-shadow-md focus:ring-[#FFB800]',
+      'bg-[#FFB800] text-[#0F172A] hover:bg-[#E5A400] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     outline:
-      'bg-white text-[#0F172A] hover:bg-[#FAF7F2] border-2 border-[#0F172A] hh-shadow-md focus:ring-[#0F172A]',
+      'bg-white text-[#0F172A] hover:bg-[#FAF7F2] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     ghost:
-      'bg-transparent text-[#0F172A] hover:bg-slate-200/60 border-2 border-transparent focus:ring-slate-400',
+      'bg-transparent text-[#0F172A] hover:bg-slate-200/60 border-transparent active:bg-slate-300/60',
   };
 
   const sizes = {
-    sm: 'text-xs px-3 py-1.5 gap-1.5',
-    md: 'text-sm px-5 py-2.5 gap-2',
-    lg: 'text-base px-7 py-3.5 gap-2.5',
+    sm: 'text-xs px-3.5 py-2 gap-1.5 min-h-[36px]',
+    md: 'text-sm px-5 py-2.5 gap-2 min-h-[44px]',
+    lg: 'text-base px-7 py-3.5 gap-2.5 min-h-[52px]',
   };
 
   return (
     <button
+      type={type}
       disabled={disabled || isLoading}
       className={twMerge(clsx(baseStyles, variants[variant], sizes[size], className))}
       {...props}
@@ -55,6 +57,7 @@ export const Button: React.FC<ButtonProps> = ({
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <circle
             className="opacity-25"
@@ -71,10 +74,10 @@ export const Button: React.FC<ButtonProps> = ({
           ></path>
         </svg>
       ) : (
-        leftIcon && <span className="inline-flex shrink-0">{leftIcon}</span>
+        leftIcon && <span className="inline-flex shrink-0" aria-hidden="true">{leftIcon}</span>
       )}
       <span>{children}</span>
-      {!isLoading && rightIcon && <span className="inline-flex shrink-0">{rightIcon}</span>}
+      {!isLoading && rightIcon && <span className="inline-flex shrink-0" aria-hidden="true">{rightIcon}</span>}
     </button>
   );
 };
