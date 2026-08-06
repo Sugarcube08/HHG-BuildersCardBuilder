@@ -58,9 +58,17 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [generatedCard, setGeneratedCard] = useState<GeneratedCardData>(initialGeneratedCard);
   const [isRestoredFromUrl, setIsRestoredFromUrl] = useState<boolean>(false);
 
-  // Parse URL on startup for /verify/:builderId or ?builder=<base64> parameter
+  // Parse URL on startup for /builder/d/[payload], /verify/:builderId or ?builder=<base64> parameter
   useEffect(() => {
-    const restoredPayload = parseBuilderUrlParam(window.location.search);
+    let rawStr = window.location.search;
+    if (window.location.pathname.includes('/builder/d/')) {
+      const parts = window.location.pathname.split('/builder/d/');
+      if (parts[1]) {
+        rawStr = `?builder=${parts[1].split('/')[0]}`;
+      }
+    }
+
+    const restoredPayload = parseBuilderUrlParam(rawStr);
     if (restoredPayload) {
       setBuilderData({
         fullName: restoredPayload.name,
