@@ -3,6 +3,7 @@ import type {
   AppStep,
   BuilderContextType,
   BuilderDetailsFormData,
+  CardFormat,
   GeneratedCardData,
   ImageUploadData,
 } from '../types/builder';
@@ -37,6 +38,7 @@ const BuilderContext = createContext<BuilderContextType | undefined>(undefined);
 
 export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState<AppStep>('LANDING');
+  const [cardFormat, setCardFormat] = useState<CardFormat>('passport');
   const [imageData, setImageData] = useState<ImageUploadData>(initialImageData);
   const [builderData, setBuilderData] = useState<BuilderDetailsFormData>(initialBuilderData);
   const [generatedCard, setGeneratedCard] = useState<GeneratedCardData>(initialGeneratedCard);
@@ -134,7 +136,6 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
     setBuilderData(initialBuilderData);
     setGeneratedCard(initialGeneratedCard);
     setIsRestoredFromUrl(false);
-    // Clear URL parameters cleanly without page refresh
     if (window.history && window.history.replaceState) {
       window.history.replaceState(null, '', window.location.pathname);
     }
@@ -148,6 +149,8 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
         setStep,
         goToNextStep,
         goToPrevStep,
+        cardFormat,
+        setCardFormat,
         imageData,
         setUploadedFile,
         clearImage,

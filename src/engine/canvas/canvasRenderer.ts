@@ -3,25 +3,26 @@ import { calculateCardLayout } from '../layout/layoutCalculator';
 import { getCardTheme } from '../theme/cardComposer';
 import { renderQrToCanvas } from '../qr/generateQr';
 import { generateBuilderId } from '../qr/builderId';
-import type { BuilderDetailsFormData } from '../../types/builder';
+import type { BuilderDetailsFormData, CardFormat } from '../../types/builder';
 
 export interface ComposeCardParams {
   imageElement: HTMLImageElement | null;
   imageMeta: ImageMetadata | null;
   builderDetails: BuilderDetailsFormData;
   qrUrl?: string;
-  targetSize?: number;
+  format?: CardFormat;
 }
 
 /**
- * Pure function that composes a high-res 1:1 Digital Builder Passport Card onto an HTML5 Canvas.
+ * Pure function that composes a high-res 16:9 Landscape Builder Passport (1600x900)
+ * or 1:1 Square Avatar Badge (1080x1080) onto an HTML5 Canvas.
  */
 export const composeBuilderCard = async (
   params: ComposeCardParams
 ): Promise<{ blob: Blob; dataUrl: string }> => {
-  const { imageElement, imageMeta, builderDetails, qrUrl, targetSize = 1080 } = params;
+  const { imageElement, imageMeta, builderDetails, qrUrl, format = 'passport' } = params;
   const theme = getCardTheme(builderDetails.role);
-  const layout = calculateCardLayout(imageMeta, targetSize);
+  const layout = calculateCardLayout(imageMeta, format);
   const builderId = generateBuilderId(
     builderDetails.fullName,
     builderDetails.role,
@@ -30,8 +31,8 @@ export const composeBuilderCard = async (
   );
 
   const canvas = document.createElement('canvas');
-  canvas.width = targetSize;
-  canvas.height = targetSize;
+  canvas.width = layout.canvasWidth;
+  canvas.height = layout.canvasHeight;
   const ctx = canvas.getContext('2d');
 
   if (!ctx) {
@@ -40,21 +41,21 @@ export const composeBuilderCard = async (
 
   // 1. Fill Canvas Background (Deep Goa Green)
   ctx.fillStyle = theme.bgColor;
-  ctx.fillRect(0, 0, targetSize, targetSize);
+  ctx.fillRect(0, 0, layout.canvasWidth, layout.canvasHeight);
 
   // Outer Framing Shadow & Border
   ctx.strokeStyle = theme.borderColor;
   ctx.lineWidth = 16;
-  ctx.strokeRect(8, 8, targetSize - 16, targetSize - 16);
+  ctx.strokeRect(8, 8, layout.canvasWidth - 16, layout.canvasHeight - 16);
 
   // 2. Top Header Banner
   ctx.fillStyle = theme.textColor;
-  ctx.font = '900 38px "Plus Jakarta Sans", sans-serif';
+  ctx.font = '900 42px "Plus Jakarta Sans", sans-serif';
   ctx.textAlign = 'left';
   ctx.fillText('HACKER HOUSE GOA 2026', layout.header.titleX, layout.header.titleY);
 
   ctx.fillStyle = theme.accentColor;
-  ctx.font = 'bold 22px "JetBrains Mono", monospace';
+  ctx.font = 'bold 24px "JetBrains Mono", monospace';
   ctx.textAlign = 'right';
   ctx.fillText('#FrameInGoa', layout.header.tagX, layout.header.tagY);
 
@@ -94,99 +95,159 @@ export const composeBuilderCard = async (
   ctx.fillRect(px + pW - 28, py + pH - 4, 32, 8);
   ctx.fillRect(px + pW - 4, py + pH - 28, 8, 32);
 
-  // 4. Builder Identity & Typography
-  const { nameY, roleBadgeY, roleBadgeHeight, taglineY } = layout.identity;
+  if (format === 'passport') {
+    // -------------------------------------------------------------
+    // 16:9 LANDSCAPE BUILDER PASSPORT COMPOSITION
+    // -------------------------------------------------------------
+    const { x: idx, nameY, roleBadgeY, roleBadgeHeight, taglineY, techStackY, builderIdY } = layout.identity;
 
-  // Builder Full Name
-  ctx.fillStyle = theme.textColor;
-  ctx.font = '900 52px "Plus Jakarta Sans", sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText((builderDetails.fullName || 'HACKER ALIAS').toUpperCase(), targetSize / 2, nameY);
+    // Builder Full Name
+    ctx.fillStyle = theme.textColor;
+    ctx.font = '900 52px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText((builderDetails.fullName || 'HACKER ALIAS').toUpperCase(), idx, nameY);
 
-  // Role Badge Box (Role-Personalized Accent Color)
-  const roleText = (builderDetails.role || 'Full Stack Developer').toUpperCase();
-  ctx.font = '800 24px "JetBrains Mono", monospace';
-  const roleMetrics = ctx.measureText(roleText);
-  const badgeWidth = roleMetrics.width + 44;
-  const badgeX = (targetSize - badgeWidth) / 2;
+    // Role Badge Box (Role-Personalized Accent Color)
+    const roleText = (builderDetails.role || 'Full Stack Developer').toUpperCase();
+    ctx.font = '800 24px "JetBrains Mono", monospace';
+    const roleMetrics = ctx.measureText(roleText);
+    const badgeWidth = roleMetrics.width + 44;
 
-  ctx.fillStyle = theme.roleBadgeBg;
-  ctx.fillRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
-  ctx.strokeStyle = theme.borderColor;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
-
-  ctx.fillStyle = theme.roleBadgeText;
-  ctx.textAlign = 'center';
-  ctx.fillText(roleText, targetSize / 2, roleBadgeY + 31);
-
-  // Tagline / Motto
-  ctx.fillStyle = '#A7F3D0';
-  ctx.font = 'italic 24px "Inter", sans-serif';
-  ctx.fillText(builderDetails.tagline || '"Building the Future in Public"', targetSize / 2, taglineY);
-
-  // 5. Builder ID Box
-  const { x: bX, y: bY, width: bW, height: bH } = layout.builderIdBox;
-  ctx.fillStyle = '#07281E';
-  ctx.fillRect(bX, bY, bW, bH);
-  ctx.strokeStyle = '#12543E';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(bX, bY, bW, bH);
-
-  ctx.fillStyle = '#6EE7B7';
-  ctx.font = '800 20px "JetBrains Mono", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(`BUILDER ID: ${builderId}`, targetSize / 2, bY + 28);
-
-  // 6. Interactive Scannable QR Verification Block
-  const { x: qX, y: qY, boxWidth: qW, boxHeight: qH } = layout.qrBlock;
-
-  // QR Container Box Background
-  ctx.fillStyle = '#FAF7F2';
-  ctx.fillRect(qX, qY, qW, qH);
-  ctx.strokeStyle = theme.borderColor;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(qX, qY, qW, qH);
-
-  if (qrUrl) {
-    const qrInnerX = qX + 16;
-    const qrInnerY = qY + 12;
-    const qrInnerSize = qH - 24;
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillRect(qrInnerX, qrInnerY, qrInnerSize, qrInnerSize);
+    ctx.fillStyle = theme.roleBadgeBg;
+    ctx.fillRect(idx, roleBadgeY, badgeWidth, roleBadgeHeight);
     ctx.strokeStyle = theme.borderColor;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(qrInnerX, qrInnerY, qrInnerSize, qrInnerSize);
+    ctx.lineWidth = 4;
+    ctx.strokeRect(idx, roleBadgeY, badgeWidth, roleBadgeHeight);
 
-    try {
-      await renderQrToCanvas(ctx, qrUrl, qrInnerX, qrInnerY, qrInnerSize);
-    } catch (err) {
-      console.warn('QR rendering to canvas warning:', err);
+    ctx.fillStyle = theme.roleBadgeText;
+    ctx.textAlign = 'center';
+    ctx.fillText(roleText, idx + badgeWidth / 2, roleBadgeY + 33);
+
+    // Motto / Tagline
+    ctx.fillStyle = '#A7F3D0';
+    ctx.font = 'italic 26px "Inter", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText(builderDetails.tagline || '"Building the Future in Public"', idx, taglineY);
+
+    // Tech Focus Tags
+    if (builderDetails.techStack) {
+      ctx.fillStyle = '#6EE7B7';
+      ctx.font = 'bold 20px "JetBrains Mono", monospace';
+      ctx.fillText(`STACK: ${builderDetails.techStack}`, idx, techStackY);
     }
 
-    // QR Verification Text Block inside box
-    const textX = qrInnerX + qrInnerSize + 24;
-    ctx.textAlign = 'left';
+    // Builder ID Box
+    const idBoxWidth = 420;
+    const idBoxHeight = 52;
+    ctx.fillStyle = '#07281E';
+    ctx.fillRect(idx, builderIdY, idBoxWidth, idBoxHeight);
+    ctx.strokeStyle = '#12543E';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(idx, builderIdY, idBoxWidth, idBoxHeight);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = '800 22px "JetBrains Mono", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(`BUILDER PASSPORT: ${builderId}`, idx + idBoxWidth / 2, builderIdY + 33);
+
+    // -------------------------------------------------------------
+    // RIGHT COLUMN: PROMINENT QR VERIFICATION BLOCK
+    // -------------------------------------------------------------
+    const { x: qX, y: qY, width: qW, height: qH, qrX, qrY, qrSize, captionY } = layout.qrColumn;
+
+    // QR Column Background Box
+    ctx.fillStyle = '#FAF7F2';
+    ctx.fillRect(qX, qY, qW, qH);
+    ctx.strokeStyle = theme.borderColor;
+    ctx.lineWidth = 6;
+    ctx.strokeRect(qX, qY, qW, qH);
+
+    if (qrUrl) {
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(qrX - 8, qrY - 8, qrSize + 16, qrSize + 16);
+      ctx.strokeStyle = theme.borderColor;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(qrX - 8, qrY - 8, qrSize + 16, qrSize + 16);
+
+      try {
+        await renderQrToCanvas(ctx, qrUrl, qrX, qrY, qrSize);
+      } catch (err) {
+        console.warn('QR rendering warning:', err);
+      }
+    }
+
+    // Captions below QR
+    ctx.textAlign = 'center';
+    const centerX = qX + qW / 2;
 
     ctx.fillStyle = '#0F172A';
-    ctx.font = '800 22px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('✓ SCAN TO VERIFY IDENTITY', textX, qY + 45);
+    ctx.font = '900 24px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('SCAN TO VERIFY IDENTITY', centerX, captionY);
 
     ctx.fillStyle = '#475569';
-    ctx.font = 'bold 16px "JetBrains Mono", monospace';
-    ctx.fillText('OFFICIAL DIGITAL BUILDER PASSPORT', textX, qY + 74);
+    ctx.font = 'bold 18px "JetBrains Mono", monospace';
+    ctx.fillText('OFFICIAL DIGITAL BUILDER PASSPORT', centerX, captionY + 32);
 
     ctx.fillStyle = theme.accentColor;
-    ctx.font = '800 16px "Inter", sans-serif';
-    ctx.fillText('HACKER HOUSE GOA 2026', textX, qY + 98);
+    ctx.font = '800 18px "Inter", sans-serif';
+    ctx.fillText('HACKER HOUSE GOA 2026', centerX, captionY + 60);
+
+  } else {
+    // -------------------------------------------------------------
+    // 1:1 SQUARE AVATAR BADGE COMPOSITION
+    // -------------------------------------------------------------
+    const { nameY, roleBadgeY, roleBadgeHeight, taglineY } = layout.identity;
+
+    // Builder Full Name
+    ctx.fillStyle = theme.textColor;
+    ctx.font = '900 52px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText((builderDetails.fullName || 'HACKER ALIAS').toUpperCase(), layout.canvasWidth / 2, nameY);
+
+    // Role Badge Box
+    const roleText = (builderDetails.role || 'Full Stack Developer').toUpperCase();
+    ctx.font = '800 24px "JetBrains Mono", monospace';
+    const roleMetrics = ctx.measureText(roleText);
+    const badgeWidth = roleMetrics.width + 44;
+    const badgeX = (layout.canvasWidth - badgeWidth) / 2;
+
+    ctx.fillStyle = theme.roleBadgeBg;
+    ctx.fillRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
+    ctx.strokeStyle = theme.borderColor;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
+
+    ctx.fillStyle = theme.roleBadgeText;
+    ctx.textAlign = 'center';
+    ctx.fillText(roleText, layout.canvasWidth / 2, roleBadgeY + 31);
+
+    // Tagline / Motto
+    ctx.fillStyle = '#A7F3D0';
+    ctx.font = 'italic 24px "Inter", sans-serif';
+    ctx.fillText(builderDetails.tagline || '"Building the Future in Public"', layout.canvasWidth / 2, taglineY);
+
+    // QR Footer Block
+    if (qrUrl) {
+      const { qrX, qrY, qrSize } = layout.qrColumn;
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
+      ctx.strokeStyle = theme.borderColor;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(qrX - 6, qrY - 6, qrSize + 12, qrSize + 12);
+
+      try {
+        await renderQrToCanvas(ctx, qrUrl, qrX, qrY, qrSize);
+      } catch (err) {
+        console.warn('QR rendering warning:', err);
+      }
+    }
   }
 
-  // 7. Bottom Footer Branding
+  // Bottom Footer Branding
   ctx.fillStyle = '#6EE7B7';
   ctx.font = 'bold 18px "JetBrains Mono", monospace';
   ctx.textAlign = 'left';
-  ctx.fillText('VERIFIED BUILDER CARD', layout.footer.leftX, layout.footer.y);
+  ctx.fillText('VERIFIED BUILDER PASSPORT', layout.footer.leftX, layout.footer.y);
 
   ctx.textAlign = 'right';
   ctx.fillText('GOA, INDIA • MARCH 2026', layout.footer.rightX, layout.footer.y);

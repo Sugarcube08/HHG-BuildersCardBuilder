@@ -8,6 +8,8 @@ export type AppStep =
   | 'DOWNLOAD'
   | 'SHARE';
 
+export type CardFormat = 'passport' | 'badge';
+
 export interface ImageUploadData {
   file: File | null;
   previewUrl: string | null;
@@ -33,6 +35,9 @@ export interface BuilderContextType {
   setStep: (step: AppStep) => void;
   goToNextStep: () => void;
   goToPrevStep: () => void;
+
+  cardFormat: CardFormat;
+  setCardFormat: (format: CardFormat) => void;
 
   imageData: ImageUploadData;
   setUploadedFile: (file: File) => Promise<void>;
