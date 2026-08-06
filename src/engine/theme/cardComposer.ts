@@ -6,6 +6,8 @@ export interface CardThemeConfig {
   textColor: string;
   accentColor: string;
   bannerColor: string;
+  roleBadgeBg: string;
+  roleBadgeText: string;
 }
 
 /**
@@ -47,14 +49,45 @@ export const generateTagline = (role: string): string => {
 };
 
 /**
- * Returns canvas theme configuration for rendering card elements.
+ * Returns role-personalized theme configuration for visual card composition.
  */
-export const getCardTheme = (): CardThemeConfig => {
+export const getCardTheme = (role: string = ''): CardThemeConfig => {
+  const normalized = role.toLowerCase();
+
+  let accentColor: string = Theme.colors.neonPink;
+  let bannerColor: string = Theme.colors.sunsetYellow;
+  let roleBadgeBg: string = Theme.colors.sunsetYellow;
+  let roleBadgeText: string = Theme.colors.ink;
+
+  if (normalized.includes('frontend') || normalized.includes('ui') || normalized.includes('ux') || normalized.includes('design')) {
+    accentColor = '#FF2E93';
+    bannerColor = '#FF2E93';
+    roleBadgeBg = '#FF2E93';
+    roleBadgeText = '#FFFFFF';
+  } else if (normalized.includes('backend') || normalized.includes('api') || normalized.includes('devops')) {
+    accentColor = '#10B981';
+    bannerColor = '#10B981';
+    roleBadgeBg = '#10B981';
+    roleBadgeText = '#0F172A';
+  } else if (normalized.includes('ai') || normalized.includes('ml') || normalized.includes('data')) {
+    accentColor = '#A855F7';
+    bannerColor = '#A855F7';
+    roleBadgeBg = '#A855F7';
+    roleBadgeText = '#FFFFFF';
+  } else if (normalized.includes('smart contract') || normalized.includes('web3') || normalized.includes('blockchain') || normalized.includes('solana')) {
+    accentColor = '#F97316';
+    bannerColor = '#F97316';
+    roleBadgeBg = '#F97316';
+    roleBadgeText = '#FFFFFF';
+  }
+
   return {
     bgColor: Theme.colors.goaGreen,
     borderColor: Theme.colors.ink,
     textColor: Theme.colors.white,
-    accentColor: Theme.colors.neonPink,
-    bannerColor: Theme.colors.sunsetYellow,
+    accentColor,
+    bannerColor,
+    roleBadgeBg,
+    roleBadgeText,
   };
 };
