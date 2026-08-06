@@ -26,6 +26,7 @@ export const StepPreview: React.FC = () => {
 
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [isGeneratingCanvas, setIsGeneratingCanvas] = useState<boolean>(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const theme = getCardTheme(builderData.role);
 
@@ -45,10 +46,11 @@ export const StepPreview: React.FC = () => {
     };
   }, [qrUrl]);
 
-  // Re-compose high-res canvas whenever builder data or image changes
+  // Re-compose high-res 2x Retina canvas whenever builder data or image changes
   useEffect(() => {
     let isMounted = true;
     setIsGeneratingCanvas(true);
+    setExportError(null);
 
     const buildCanvas = async () => {
       let imageElement: HTMLImageElement | null = null;
@@ -68,6 +70,7 @@ export const StepPreview: React.FC = () => {
           imageMeta: imageData.meta,
           builderDetails: builderData,
           qrUrl,
+          scale: 2, // 2x Retina ultra-crisp resolution
         });
 
         if (isMounted) {
@@ -77,6 +80,7 @@ export const StepPreview: React.FC = () => {
       } catch (err) {
         console.error('Canvas composition error:', err);
         if (isMounted) {
+          setExportError('Failed to prepare canvas. You can still retry.');
           setIsGeneratingCanvas(false);
         }
       }
@@ -90,10 +94,12 @@ export const StepPreview: React.FC = () => {
   }, [builderData, imageData.previewUrl, imageData.meta, qrUrl, setGeneratedCard]);
 
   const handleDownload = () => {
+    if (isGeneratingCanvas) return;
+
     if (generatedCard.blob || generatedCard.dataUrl) {
       downloadImage(
         generatedCard.blob || generatedCard.dataUrl!,
-        `hhg-2026-passport-${builderData.fullName.toLowerCase().replace(/\s+/g, '-')}.png`
+        builderData.fullName
       );
     } else {
       setStep('DOWNLOAD');
@@ -264,7 +270,7 @@ export const StepPreview: React.FC = () => {
           leftIcon={<Download className="w-4 h-4" />}
           className="w-full sm:w-auto"
         >
-          Download PNG
+          {isGeneratingCanvas ? 'Preparing Passport...' : 'Download PNG'}
         </Button>
 
         <Button
@@ -277,15 +283,21 @@ export const StepPreview: React.FC = () => {
         </Button>
       </div>
 
-      {/* Verification Notice */}
-      <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2.5 py-3 px-4">
-        <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-        <span>
-          {isRestoredFromUrl
-            ? '✓ Verified Builder Passport restored from QR code URL payload.'
-            : 'Digital Builder Passport formatted for instant QR scanning and verification.'}
-        </span>
-      </Card>
+      {/* Verification / Error Notice */}
+      {exportError ? (
+        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-rose-600 flex items-center gap-2.5 py-3 px-4 border-rose-500">
+          <span>⚠️ {exportError}</span>
+        </Card>
+      ) : (
+        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2.5 py-3 px-4">
+          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
+          <span>
+            {isRestoredFromUrl
+              ? '✓ Verified Builder Passport restored from QR code URL payload.'
+              : 'Digital Builder Passport formatted for high-res PNG export & QR verification.'}
+          </span>
+        </Card>
+      )}
     </div>
   );
 };
