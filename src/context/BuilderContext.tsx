@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, type ReactNode } from 'react';
+import React, { createContext, useState, useEffect, useMemo, type ReactNode } from 'react';
 import type {
   AppStep,
   BuilderContextType,
@@ -34,7 +34,19 @@ const initialGeneratedCard: GeneratedCardData = {
   blob: null,
 };
 
-const BuilderContext = createContext<BuilderContextType | undefined>(undefined);
+/**
+ * Reads a File object into a Base64 Data URL for zero-CORS DOM export compatibility.
+ */
+const fileToDataUrl = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
+export const BuilderContext = createContext<BuilderContextType | undefined>(undefined);
 
 export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentStep, setCurrentStep] = useState<AppStep>('LANDING');
@@ -106,7 +118,8 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
 
   const setUploadedFile = async (file: File) => {
     try {
-      const previewUrl = URL.createObjectURL(file);
+      // Read file into Base64 Data URL to guarantee zero-CORS DOM export compatibility
+      const previewUrl = await fileToDataUrl(file);
       const meta = await analyzeImage(file);
 
       setImageData({
@@ -121,9 +134,6 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   };
 
   const clearImage = () => {
-    if (imageData.previewUrl) {
-      URL.revokeObjectURL(imageData.previewUrl);
-    }
     setImageData(initialImageData);
   };
 
@@ -170,10 +180,4 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   );
 };
 
-export const useBuilder = (): BuilderContextType => {
-  const context = useContext(BuilderContext);
-  if (!context) {
-    throw new Error('useBuilder must be used within a BuilderProvider');
-  }
-  return context;
-};
+export { useBuilder } from './useBuilder';
