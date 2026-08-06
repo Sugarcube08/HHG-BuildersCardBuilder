@@ -53,7 +53,7 @@ export const encodePayloadToBase64 = (payload: BuilderPayloadSchema): string => 
  * supporting Vercel, Netlify, GitHub Pages, or custom domain deployments.
  */
 export const getDynamicBaseUrl = (): string => {
-  const envUrl = import.meta.env.VITE_PUBLIC_URL || import.meta.env.VITE_BASE_URL;
+  const envUrl = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_URL : undefined;
   if (envUrl && typeof envUrl === 'string' && envUrl.trim().length > 0) {
     let clean = envUrl.trim();
     if (!clean.endsWith('/')) clean += '/';
