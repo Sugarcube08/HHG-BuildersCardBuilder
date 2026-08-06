@@ -83,8 +83,12 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
 
       setIsRestoredFromUrl(true);
       
-      // If the URL contains /verify/ or ?builder=, jump directly to VERIFY step
-      if (window.location.pathname.includes('/verify') || window.location.search.includes('builder=')) {
+      // If the URL contains /verify/, /builder/, or ?builder=, jump directly to VERIFY step
+      if (
+        window.location.pathname.includes('/verify') ||
+        window.location.pathname.includes('/builder') ||
+        window.location.search.includes('builder=')
+      ) {
         setCurrentStep('VERIFY');
       } else {
         setCurrentStep('PREVIEW');

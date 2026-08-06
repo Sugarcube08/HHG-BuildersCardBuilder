@@ -69,8 +69,8 @@ export const getDynamicBaseUrl = (): string => {
 };
 
 /**
- * Generates the canonical Builder Public Verification & Restoration Share URL.
- * Example: https://hhgoa.vercel.app/verify/HH26-4A8F92C1?builder=<base64>
+ * Generates the canonical Builder Public Profile & Restoration Share URL.
+ * Example: https://hhgoa.vercel.app/builder/HH26-4A8F92C1?builder=<base64>
  */
 export const generateBuilderUrl = (
   details: BuilderDetailsFormData,
@@ -82,5 +82,5 @@ export const generateBuilderUrl = (
   const encoded = encodePayloadToBase64(payload);
 
   const cleanBase = baseUrl.endsWith('/') ? baseUrl : `${baseUrl}/`;
-  return `${cleanBase}verify/${payload.id}?builder=${encoded}`;
+  return `${cleanBase}builder/${payload.id}?builder=${encoded}`;
 };
