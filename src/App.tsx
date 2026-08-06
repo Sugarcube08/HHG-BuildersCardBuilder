@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { BuilderProvider, useBuilder } from './context/BuilderContext';
+import { useBuilder } from './context/BuilderContext';
 import { PageShell } from './components/layout/PageShell';
 import { StepLanding } from './components/flow/StepLanding';
 import { StepUpload } from './components/flow/StepUpload';
@@ -32,11 +32,9 @@ const FlowRenderer: React.FC = () => {
 
 export function App() {
   return (
-    <BuilderProvider>
-      <PageShell>
-        <FlowRenderer />
-      </PageShell>
-    </BuilderProvider>
+    <PageShell>
+      <FlowRenderer />
+    </PageShell>
   );
 }
 

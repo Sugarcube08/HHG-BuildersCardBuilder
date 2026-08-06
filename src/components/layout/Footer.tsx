@@ -1,6 +1,4 @@
 import React from 'react';
-import footerTrees from '../../assets/decorations/footer trees.png';
-import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { MapPin, Calendar, Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -9,7 +7,7 @@ export const Footer: React.FC = () => {
       {/* Decorative Palm Trees Background Image */}
       <div className="absolute inset-0 opacity-15 pointer-events-none mix-blend-overlay flex justify-center items-end">
         <img
-          src={typeof footerTrees === 'string' ? footerTrees : footerTrees.src}
+          src="/decorations/footer trees.png"
           alt="Goa Trees Decoration"
           className="w-full max-w-7xl object-cover object-bottom h-48"
         />
@@ -46,7 +44,7 @@ export const Footer: React.FC = () => {
 
           {/* Hindi Asset & Tagline */}
           <div className="flex flex-col items-center md:items-end gap-2">
-            <img src={goaHindiSvg} alt="Goa Hindi Graphic" className="h-8 w-auto opacity-90" />
+            <img src="/decorations/goa_hindi.svg" alt="Goa Hindi Graphic" className="h-8 w-auto opacity-90" />
             <span className="text-xs text-emerald-300 font-mono tracking-widest uppercase">
               #FrameInGoa
             </span>

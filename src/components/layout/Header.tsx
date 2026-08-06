@@ -4,8 +4,6 @@ import React from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import hackerHouseLogo from '../../assets/logos/Hacker house.png';
-import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { RotateCcw, Sparkles } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -23,7 +21,7 @@ export const Header: React.FC = () => {
         >
           <div className="relative bg-white/10 p-1.5 rounded-xl border-2 border-white/20 group-hover:border-[#FF2E93] transition-colors">
             <img
-              src={typeof hackerHouseLogo === 'string' ? hackerHouseLogo : hackerHouseLogo.src}
+              src="/logos/Hacker house.png"
               alt="Hacker House Logo"
               className="h-9 sm:h-10 w-auto object-contain"
             />
@@ -39,7 +37,7 @@ export const Header: React.FC = () => {
             </div>
             <div className="flex items-center gap-1.5 text-xs text-emerald-200/90 font-medium">
               <span>Digital Builder Identity</span>
-              <img src={goaHindiSvg} alt="Goa Hindi" className="h-3.5 opacity-80 inline-block" />
+              <img src="/decorations/goa_hindi.svg" alt="Goa Hindi" className="h-3.5 opacity-80 inline-block" />
             </div>
           </div>
         </button>

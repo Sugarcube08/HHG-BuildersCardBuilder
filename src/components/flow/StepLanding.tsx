@@ -5,9 +5,6 @@ import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import sunriseArt from '../../assets/backgrounds/Sun rise.png';
-import hackersArt from '../../assets/illustrations/hackers.png';
-import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { ArrowRight, Sparkles, Image as ImageIcon, ShieldCheck, QrCode } from 'lucide-react';
 
 export const StepLanding: React.FC = () => {
@@ -49,7 +46,7 @@ export const StepLanding: React.FC = () => {
       <Card variant="emerald" shadow="yellow" className="w-full max-w-4xl overflow-hidden relative p-8 sm:p-10">
         {/* Background Sunrise Illustration Overlay */}
         <div className="absolute -right-12 -bottom-12 opacity-25 pointer-events-none w-80 h-80">
-          <img src={typeof sunriseArt === 'string' ? sunriseArt : sunriseArt.src} alt="Goa Sunrise Artwork" className="w-full h-full object-cover" />
+          <img src="/backgrounds/Sun rise.png" alt="Goa Sunrise Artwork" className="w-full h-full object-cover" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10 text-left">
@@ -68,7 +65,7 @@ export const StepLanding: React.FC = () => {
             </p>
 
             <div className="flex items-center gap-3 pt-2">
-              <img src={goaHindiSvg} alt="Goa Hindi Graphic" className="h-7 w-auto" />
+              <img src="/decorations/goa_hindi.svg" alt="Goa Hindi Graphic" className="h-7 w-auto" />
               <span className="text-xs font-mono font-bold text-emerald-300">March 2026 • Goa, India</span>
             </div>
           </div>
@@ -79,7 +76,7 @@ export const StepLanding: React.FC = () => {
               <div className="bg-[#FAF7F2] p-5 rounded-2xl border-3 border-[#0F172A] hh-shadow-pink max-w-xs transform group-hover:-rotate-1 transition-all duration-300">
                 <div className="relative rounded-xl overflow-hidden border-2 border-[#0F172A]">
                   <img
-                    src={typeof hackersArt === 'string' ? hackersArt : hackersArt.src}
+                    src="/illustrations/hackers.png"
                     alt="Hacker House Workspace Illustration"
                     className="w-full h-48 object-cover"
                   />
