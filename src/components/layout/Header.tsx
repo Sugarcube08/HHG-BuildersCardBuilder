@@ -2,8 +2,8 @@ import React from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { Badge } from '../common/Badge';
 import { Button } from '../common/Button';
-import hackerHouseLogo from '../../assets/Hacker house.png';
-import goaHindiSvg from '../../assets/goa_hindi.svg';
+import hackerHouseLogo from '../../assets/logos/Hacker house.png';
+import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { RotateCcw, Sparkles } from 'lucide-react';
 
 export const Header: React.FC = () => {

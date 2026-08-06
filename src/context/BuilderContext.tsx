@@ -3,30 +3,31 @@ import type {
   AppStep,
   BuilderContextType,
   BuilderDetailsFormData,
-  CardThemeOptions,
+  GeneratedCardData,
   ImageUploadData,
 } from '../types/builder';
 import { STEP_ORDER } from '../constants/steps';
+import { analyzeImage } from '../engine/image/aspectRatio';
+import { generateTagline } from '../engine/theme/themeComposer';
 
 const initialImageData: ImageUploadData = {
   file: null,
   previewUrl: null,
   fileName: null,
-  aspectRatio: null,
-  dimensions: null,
+  meta: null,
 };
 
 const initialBuilderData: BuilderDetailsFormData = {
   fullName: '',
   role: 'Full Stack Developer',
-  tagline: '"The System Architect"',
+  tagline: generateTagline('Full Stack Developer'),
   twitterHandle: '',
   techStack: 'React, TypeScript, Tailwind',
 };
 
-const initialThemeOptions: CardThemeOptions = {
-  backgroundPreset: 'sunset',
-  badgeStyle: 'builder',
+const initialGeneratedCard: GeneratedCardData = {
+  dataUrl: null,
+  blob: null,
 };
 
 const BuilderContext = createContext<BuilderContextType | undefined>(undefined);
@@ -35,7 +36,7 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const [currentStep, setCurrentStep] = useState<AppStep>('LANDING');
   const [imageData, setImageData] = useState<ImageUploadData>(initialImageData);
   const [builderData, setBuilderData] = useState<BuilderDetailsFormData>(initialBuilderData);
-  const [themeOptions, setThemeOptions] = useState<CardThemeOptions>(initialThemeOptions);
+  const [generatedCard, setGeneratedCard] = useState<GeneratedCardData>(initialGeneratedCard);
 
   const setStep = (step: AppStep) => {
     setCurrentStep(step);
@@ -56,32 +57,20 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
     }
   };
 
-  const setUploadedFile = (file: File) => {
-    const previewUrl = URL.createObjectURL(file);
-    const img = new Image();
-
-    img.onload = () => {
-      const width = img.naturalWidth;
-      const height = img.naturalHeight;
-      const ratio = width / height;
-
-      let aspectRatio: 'square' | 'portrait' | 'landscape' = 'square';
-      if (ratio > 1.1) {
-        aspectRatio = 'landscape';
-      } else if (ratio < 0.9) {
-        aspectRatio = 'portrait';
-      }
+  const setUploadedFile = async (file: File) => {
+    try {
+      const previewUrl = URL.createObjectURL(file);
+      const meta = await analyzeImage(file);
 
       setImageData({
         file,
         previewUrl,
         fileName: file.name,
-        aspectRatio,
-        dimensions: { width, height },
+        meta,
       });
-    };
-
-    img.src = previewUrl;
+    } catch (err) {
+      console.error('Failed to process image file:', err);
+    }
   };
 
   const clearImage = () => {
@@ -98,7 +87,7 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
   const resetFlow = () => {
     clearImage();
     setBuilderData(initialBuilderData);
-    setThemeOptions(initialThemeOptions);
+    setGeneratedCard(initialGeneratedCard);
     setCurrentStep('LANDING');
   };
 
@@ -110,14 +99,13 @@ export const BuilderProvider: React.FC<{ children: ReactNode }> = ({ children })
         goToNextStep,
         goToPrevStep,
         imageData,
-        setImageData,
         setUploadedFile,
         clearImage,
         builderData,
         setBuilderData,
         updateBuilderDetails,
-        themeOptions,
-        setThemeOptions,
+        generatedCard,
+        setGeneratedCard,
         resetFlow,
       }}
     >

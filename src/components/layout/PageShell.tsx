@@ -2,7 +2,7 @@ import React, { type ReactNode } from 'react';
 import { Header } from './Header';
 import { StepTracker } from './StepTracker';
 import { Footer } from './Footer';
-import sunriseBg from '../../assets/Sun rise.png';
+import sunriseBg from '../../assets/backgrounds/Sun rise.png';
 
 export interface PageShellProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ export const PageShell: React.FC<PageShellProps> = ({ children }) => {
 
       {/* Main Responsive Body with Decorative Background Sunrise Asset */}
       <main className="flex-1 relative overflow-hidden py-8 sm:py-12 px-4 sm:px-6">
-        {/* Subtle Ambient Background Sunrise Illustration */}
+        {/* Ambient Background Sunrise Illustration */}
         <div className="absolute top-0 right-0 -mr-24 -mt-20 w-96 h-96 opacity-10 pointer-events-none rounded-full overflow-hidden blur-sm">
           <img src={sunriseBg} alt="Sunrise Artwork" className="w-full h-full object-cover" />
         </div>

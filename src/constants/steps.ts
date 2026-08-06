@@ -31,29 +31,22 @@ export const APP_STEPS: StepConfig[] = [
     description: 'Enter your name, role, and builder motto.',
   },
   {
-    id: 'GENERATE',
-    number: 4,
-    title: 'Building Your Identity',
-    shortTitle: 'Generate',
-    description: 'Rendering your official HH Goa 2026 Builder Card.',
-  },
-  {
     id: 'PREVIEW',
-    number: 5,
+    number: 4,
     title: 'Preview Your Card',
     shortTitle: 'Preview',
     description: 'Your customized HH Goa 2026 Builder Card is ready.',
   },
   {
     id: 'DOWNLOAD',
-    number: 6,
+    number: 5,
     title: 'Download Card',
     shortTitle: 'Download',
     description: 'Save your high-res PNG card to your device.',
   },
   {
     id: 'SHARE',
-    number: 7,
+    number: 6,
     title: 'Share with Community',
     shortTitle: 'Share',
     description: 'Post your card to X with #FrameInGoa.',
@@ -64,7 +57,6 @@ export const STEP_ORDER: AppStep[] = [
   'LANDING',
   'UPLOAD',
   'DETAILS',
-  'GENERATE',
   'PREVIEW',
   'DOWNLOAD',
   'SHARE',
@@ -79,13 +71,4 @@ export const PRESET_ROLES = [
   'Product Designer',
   'Open Source Contributor',
   'DevRel / Community',
-];
-
-export const PRESET_TAGLINES = [
-  '"The System Architect"',
-  '"Building in Public 🚀"',
-  '"Turning Coffee into Code ☕"',
-  '"Goa Hack Mode: Enabled 🌴"',
-  '"Shipping to Production 🚢"',
-  '"Decentralize Everything ⚡"',
 ];

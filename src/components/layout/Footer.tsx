@@ -1,6 +1,6 @@
 import React from 'react';
-import footerTrees from '../../assets/footer trees.png';
-import goaHindiSvg from '../../assets/goa_hindi.svg';
+import footerTrees from '../../assets/decorations/footer trees.png';
+import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { MapPin, Calendar, Heart } from 'lucide-react';
 
 export const Footer: React.FC = () => {

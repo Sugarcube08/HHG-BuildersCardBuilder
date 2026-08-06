@@ -12,7 +12,7 @@ export const StepUpload: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setUploadedFile(e.target.files[0]);
+      void setUploadedFile(e.target.files[0]);
     }
   };
 
@@ -29,7 +29,7 @@ export const StepUpload: React.FC = () => {
     e.preventDefault();
     setIsDragging(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      setUploadedFile(e.dataTransfer.files[0]);
+      void setUploadedFile(e.dataTransfer.files[0]);
     }
   };
 
@@ -38,7 +38,7 @@ export const StepUpload: React.FC = () => {
       {/* Title & Instructions */}
       <div className="flex flex-col gap-2">
         <Badge variant="green" className="w-fit mx-auto">
-          Step 2 of 7
+          Step 2 of 6
         </Badge>
         <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">Upload Your Photo</h2>
         <p className="text-xs sm:text-sm text-slate-600 font-medium">
@@ -71,19 +71,21 @@ export const StepUpload: React.FC = () => {
 
         {imageData.previewUrl ? (
           <div className="flex flex-col items-center gap-5">
-            {/* Image Preview Container with Aspect Ratio Display */}
+            {/* Image Preview Container with Rich Metadata Display */}
             <div className="relative group max-w-xs mx-auto">
               <img
                 src={imageData.previewUrl}
                 alt="Uploaded preview"
                 className="max-h-64 rounded-xl border-2 border-[#0F172A] object-contain shadow-md"
               />
-              <Badge
-                variant="dark"
-                className="absolute top-2 right-2 text-[10px] lowercase font-mono bg-[#0F172A]/90 text-white"
-              >
-                {imageData.aspectRatio} ({imageData.dimensions?.width}×{imageData.dimensions?.height})
-              </Badge>
+              {imageData.meta && (
+                <Badge
+                  variant="dark"
+                  className="absolute top-2 right-2 text-[10px] lowercase font-mono bg-[#0F172A]/90 text-white"
+                >
+                  {imageData.meta.orientation} ({imageData.meta.width}×{imageData.meta.height} • {imageData.meta.ratio.toFixed(2)})
+                </Badge>
+              )}
             </div>
 
             <div className="flex flex-col items-center gap-1">

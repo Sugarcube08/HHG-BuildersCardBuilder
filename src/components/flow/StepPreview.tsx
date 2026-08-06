@@ -3,24 +3,26 @@ import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import hackerHouseLogo from '../../assets/Hacker house.png';
-import footerTrees from '../../assets/footer trees.png';
-import goaHindiSvg from '../../assets/goa_hindi.svg';
+import { downloadImage } from '../../engine/export/download';
+import { shareToX } from '../../engine/export/share';
+import hackerHouseLogo from '../../assets/logos/Hacker house.png';
+import footerTrees from '../../assets/decorations/footer trees.png';
+import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { Download, Share2, Edit3, CheckCircle2, Shield } from 'lucide-react';
 
 export const StepPreview: React.FC = () => {
-  const { builderData, imageData, setStep } = useBuilder();
+  const { builderData, imageData, setStep, generatedCard } = useBuilder();
 
   const handleDownload = () => {
-    setStep('DOWNLOAD');
+    if (generatedCard.blob || generatedCard.dataUrl) {
+      downloadImage(generatedCard.blob || generatedCard.dataUrl!, `hhg-2026-${builderData.fullName.toLowerCase().replace(/\s+/g, '-')}.png`);
+    } else {
+      setStep('DOWNLOAD');
+    }
   };
 
   const handleShare = () => {
-    const text = encodeURIComponent(
-      `Ready for Hacker House Goa 2026! 🚀\n\nI'm ${builderData.fullName} building as a ${builderData.role}.\n\n#FrameInGoa #HHGoa2026`
-    );
-    const shareUrl = `https://twitter.com/intent/tweet?text=${text}`;
-    window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    shareToX(builderData.fullName, builderData.role);
     setStep('SHARE');
   };
 
@@ -29,13 +31,13 @@ export const StepPreview: React.FC = () => {
       {/* Title & Instructions */}
       <div className="flex flex-col gap-2">
         <Badge variant="green" className="w-fit mx-auto">
-          Step 5 of 7 • Preview
+          Step 4 of 6 • Preview
         </Badge>
         <h2 className="text-2xl sm:text-4xl font-extrabold text-[#0F172A]">
           Your HH Goa 2026 Builder Card
         </h2>
         <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-lg">
-          Your card has been generated with zero image cropping and official event branding.
+          Your card has been formatted with zero image cropping and official event branding.
         </p>
       </div>
 
@@ -58,7 +60,7 @@ export const StepPreview: React.FC = () => {
             </Badge>
           </div>
 
-          {/* Photo Frame Container (Zero Auto Crop preserving original aspect ratio) */}
+          {/* Photo Frame Container */}
           <div className="w-full relative z-10 flex flex-col items-center justify-center min-h-[220px] bg-[#07281E] border-2 border-white/20 rounded-2xl p-4">
             {imageData.previewUrl ? (
               <img
@@ -146,7 +148,7 @@ export const StepPreview: React.FC = () => {
       {/* Status Notice */}
       <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2 py-3 px-4">
         <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-        <span>Card framework is ready for canvas rendering and social sharing integrations.</span>
+        <span>Canvas engine and export modules connected cleanly.</span>
       </Card>
     </div>
   );

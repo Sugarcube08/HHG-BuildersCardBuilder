@@ -4,7 +4,6 @@ import { PageShell } from './components/layout/PageShell';
 import { StepLanding } from './components/flow/StepLanding';
 import { StepUpload } from './components/flow/StepUpload';
 import { StepDetails } from './components/flow/StepDetails';
-import { StepGenerate } from './components/flow/StepGenerate';
 import { StepPreview } from './components/flow/StepPreview';
 
 const FlowRenderer: React.FC = () => {
@@ -17,8 +16,6 @@ const FlowRenderer: React.FC = () => {
       return <StepUpload />;
     case 'DETAILS':
       return <StepDetails />;
-    case 'GENERATE':
-      return <StepGenerate />;
     case 'PREVIEW':
     case 'DOWNLOAD':
     case 'SHARE':

@@ -3,9 +3,9 @@ import { useBuilder } from '../../context/BuilderContext';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
-import sunriseArt from '../../assets/Sun rise.png';
-import hackersArt from '../../assets/hackers.png';
-import goaHindiSvg from '../../assets/goa_hindi.svg';
+import sunriseArt from '../../assets/backgrounds/Sun rise.png';
+import hackersArt from '../../assets/illustrations/hackers.png';
+import goaHindiSvg from '../../assets/decorations/goa_hindi.svg';
 import { ArrowRight, Sparkles, Image as ImageIcon, ShieldCheck, Zap } from 'lucide-react';
 
 export const StepLanding: React.FC = () => {
