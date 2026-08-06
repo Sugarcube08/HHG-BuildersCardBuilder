@@ -53,7 +53,6 @@ export const StepPreview: React.FC = () => {
           <div className="w-full flex items-center justify-between border-b border-emerald-800/80 pb-4 relative z-10">
             <div className="flex items-center gap-2">
               <img src={hackerHouseLogo} alt="HH Logo" className="h-8 w-auto" />
-              <span className="font-extrabold text-sm tracking-tight text-white">HACKER HOUSE</span>
             </div>
             <Badge variant="yellow" className="text-[9px] py-0.5 px-2">
               GOA 2026

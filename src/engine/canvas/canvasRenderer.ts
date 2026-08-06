@@ -1,9 +1,9 @@
 import type { ImageMetadata } from '../image/aspectRatio';
-import { calculateCanvasPlacement } from '../image/aspectRatio';
-import { getThemeConfig } from '../theme/themeComposer';
+import { calculateCardLayout } from '../layout/layoutCalculator';
+import { getCardTheme } from '../theme/cardComposer';
 import type { BuilderDetailsFormData } from '../../types/builder';
 
-export interface RenderCardParams {
+export interface ComposeCardParams {
   imageElement: HTMLImageElement | null;
   imageMeta: ImageMetadata | null;
   builderDetails: BuilderDetailsFormData;
@@ -11,13 +11,15 @@ export interface RenderCardParams {
 }
 
 /**
- * Pure function that renders a high-res 1:1 Builder Card onto an HTML5 Canvas and returns a Blob URL.
+ * Pure function that composes a high-res 1:1 Builder Card onto an HTML5 Canvas using
+ * the Layout Engine and Card Composer, returning a Blob and Data URL.
  */
-export const renderBuilderCard = async (
-  params: RenderCardParams
+export const composeBuilderCard = async (
+  params: ComposeCardParams
 ): Promise<{ blob: Blob; dataUrl: string }> => {
   const { imageElement, imageMeta, builderDetails, targetSize = 1080 } = params;
-  const theme = getThemeConfig();
+  const theme = getCardTheme();
+  const layout = calculateCardLayout(imageMeta, targetSize);
 
   const canvas = document.createElement('canvas');
   canvas.width = targetSize;
@@ -28,90 +30,93 @@ export const renderBuilderCard = async (
     throw new Error('Could not get 2D context from canvas.');
   }
 
-  // 1. Draw Background
+  // 1. Fill Canvas Background
   ctx.fillStyle = theme.bgColor;
   ctx.fillRect(0, 0, targetSize, targetSize);
 
-  // 2. Draw Outer Border & Brand Shadow
+  // 2. Draw Outer Border & Framing Shadow
   ctx.strokeStyle = theme.borderColor;
   ctx.lineWidth = 16;
   ctx.strokeRect(8, 8, targetSize - 16, targetSize - 16);
 
-  // 3. Draw Header Title: HACKER HOUSE GOA 2026
+  // 3. Draw Header Title & Hashtag using Layout Engine coordinates
   ctx.fillStyle = theme.textColor;
   ctx.font = 'bold 36px "Plus Jakarta Sans", sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('HACKER HOUSE GOA 2026', 48, 72);
+  ctx.fillText('HACKER HOUSE GOA 2026', layout.header.titleX, layout.header.titleY);
 
   ctx.fillStyle = theme.accentColor;
   ctx.font = 'bold 24px "JetBrains Mono", monospace';
   ctx.textAlign = 'right';
-  ctx.fillText('#FrameInGoa', targetSize - 48, 72);
+  ctx.fillText('#FrameInGoa', layout.header.tagX, layout.header.tagY);
 
-  // Divider Line
+  // Header Divider Line
   ctx.beginPath();
-  ctx.moveTo(48, 96);
-  ctx.lineTo(targetSize - 48, 96);
+  ctx.moveTo(layout.header.titleX, layout.header.dividerY);
+  ctx.lineTo(layout.header.tagX, layout.header.dividerY);
   ctx.strokeStyle = '#12543E';
   ctx.lineWidth = 4;
   ctx.stroke();
 
-  // 4. Draw Photo Frame Area if Image Exists
-  const photoBoxX = 64;
-  const photoBoxY = 120;
-  const photoBoxSize = targetSize - 128 - 200; // Leave space for bottom details
-
+  // 4. Render Photo Region
+  const { x: px, y: py, size: pSize, placement } = layout.photoRegion;
   ctx.fillStyle = '#07281E';
-  ctx.fillRect(photoBoxX, photoBoxY, photoBoxSize, photoBoxSize);
+  ctx.fillRect(px, py, pSize, pSize);
   ctx.strokeStyle = theme.borderColor;
   ctx.lineWidth = 6;
-  ctx.strokeRect(photoBoxX, photoBoxY, photoBoxSize, photoBoxSize);
+  ctx.strokeRect(px, py, pSize, pSize);
 
-  if (imageElement && imageMeta) {
-    const placement = calculateCanvasPlacement(imageMeta.width, imageMeta.height, photoBoxSize);
+  if (imageElement && placement) {
     ctx.drawImage(
       imageElement,
-      photoBoxX + placement.drawX,
-      photoBoxY + placement.drawY,
+      px + placement.drawX,
+      py + placement.drawY,
       placement.drawWidth,
       placement.drawHeight
     );
   }
 
-  // 5. Draw Builder Details Text
-  const detailsY = photoBoxY + photoBoxSize + 48;
+  // 5. Render Builder Details & Typography
+  const { nameY, roleBadgeY, roleBadgeHeight, taglineY } = layout.typography;
 
-  // Name
+  // Builder Name
   ctx.fillStyle = theme.textColor;
   ctx.font = 'extrabold 48px "Plus Jakarta Sans", sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(builderDetails.fullName || 'Hacker Alias', targetSize / 2, detailsY);
+  ctx.fillText(builderDetails.fullName || 'Hacker Alias', targetSize / 2, nameY);
 
   // Role Badge Box
   const roleText = (builderDetails.role || 'Full Stack Developer').toUpperCase();
   ctx.font = 'bold 24px "JetBrains Mono", monospace';
   const roleMetrics = ctx.measureText(roleText);
   const badgeWidth = roleMetrics.width + 40;
-  const badgeHeight = 44;
   const badgeX = (targetSize - badgeWidth) / 2;
-  const badgeY = detailsY + 20;
 
   ctx.fillStyle = theme.bannerColor;
-  ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight);
+  ctx.fillRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
   ctx.strokeStyle = theme.borderColor;
   ctx.lineWidth = 4;
-  ctx.strokeRect(badgeX, badgeY, badgeWidth, badgeHeight);
+  ctx.strokeRect(badgeX, roleBadgeY, badgeWidth, roleBadgeHeight);
 
   ctx.fillStyle = theme.borderColor;
   ctx.textAlign = 'center';
-  ctx.fillText(roleText, targetSize / 2, badgeY + 30);
+  ctx.fillText(roleText, targetSize / 2, roleBadgeY + 32);
 
   // Tagline
   ctx.fillStyle = '#A7F3D0';
   ctx.font = 'italic 24px "Inter", sans-serif';
-  ctx.fillText(builderDetails.tagline || '"Building in Public"', targetSize / 2, badgeY + 90);
+  ctx.fillText(builderDetails.tagline || '"Building in Public"', targetSize / 2, taglineY);
 
-  // Convert canvas to blob & data URL
+  // 6. Draw Footer Branding
+  ctx.fillStyle = '#6EE7B7';
+  ctx.font = 'bold 20px "JetBrains Mono", monospace';
+  ctx.textAlign = 'left';
+  ctx.fillText('OFFICIAL BUILDER CARD', layout.footer.hashtagX, layout.footer.y);
+
+  ctx.textAlign = 'right';
+  ctx.fillText('GOA, INDIA', layout.footer.badgeX, layout.footer.y);
+
+  // Export Canvas to Blob & Data URL
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (!blob) {

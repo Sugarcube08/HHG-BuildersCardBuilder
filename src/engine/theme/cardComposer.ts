@@ -1,6 +1,6 @@
 import { Theme } from '../../theme/theme';
 
-export interface RenderThemeConfig {
+export interface CardThemeConfig {
   bgColor: string;
   borderColor: string;
   textColor: string;
@@ -23,10 +23,20 @@ export const generateTagline = (role: string): string => {
   if (normalized.includes('ai') || normalized.includes('ml') || normalized.includes('data')) {
     return '"Neural Network Hacker & Prompt Sorcerer"';
   }
-  if (normalized.includes('smart contract') || normalized.includes('web3') || normalized.includes('blockchain') || normalized.includes('solana')) {
+  if (
+    normalized.includes('smart contract') ||
+    normalized.includes('web3') ||
+    normalized.includes('blockchain') ||
+    normalized.includes('solana')
+  ) {
     return '"On-Chain Voyager & Consensus Builder"';
   }
-  if (normalized.includes('full stack') || normalized.includes('fullstack') || normalized.includes('developer') || normalized.includes('engineer')) {
+  if (
+    normalized.includes('full stack') ||
+    normalized.includes('fullstack') ||
+    normalized.includes('developer') ||
+    normalized.includes('engineer')
+  ) {
     return '"Full Stack Sorcerer & Product Hacker"';
   }
   if (normalized.includes('designer') || normalized.includes('product')) {
@@ -37,9 +47,9 @@ export const generateTagline = (role: string): string => {
 };
 
 /**
- * Returns canvas color configuration based on theme settings.
+ * Returns canvas theme configuration for rendering card elements.
  */
-export const getThemeConfig = (): RenderThemeConfig => {
+export const getCardTheme = (): CardThemeConfig => {
   return {
     bgColor: Theme.colors.goaGreen,
     borderColor: Theme.colors.ink,

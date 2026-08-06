@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useBuilder } from '../../context/BuilderContext';
 import type { BuilderDetailsFormData } from '../../types/builder';
 import { PRESET_ROLES } from '../../constants/steps';
-import { generateTagline } from '../../engine/theme/themeComposer';
+import { generateTagline } from '../../engine/theme/cardComposer';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { Card } from '../common/Card';

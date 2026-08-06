@@ -8,7 +8,7 @@ import type {
 } from '../types/builder';
 import { STEP_ORDER } from '../constants/steps';
 import { analyzeImage } from '../engine/image/aspectRatio';
-import { generateTagline } from '../engine/theme/themeComposer';
+import { generateTagline } from '../engine/theme/cardComposer';
 
 const initialImageData: ImageUploadData = {
   file: null,
