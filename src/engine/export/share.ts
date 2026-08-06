@@ -1,4 +1,24 @@
 /**
+ * Uploads a generated PNG Data URL to /api/share/upload and returns the temporary imageId.
+ */
+export const uploadPassportPng = async (dataUrl: string): Promise<string | null> => {
+  try {
+    const res = await fetch('/api/share/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: dataUrl }),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.imageId || null;
+  } catch (err) {
+    console.warn('Failed to upload image for sharing:', err);
+    return null;
+  }
+};
+
+/**
  * Hardened Twitter / X Share Engine:
  * 1. Pre-warms the canonical Builder route and Open Graph image endpoints.
  * 2. Enforces a 300ms delay to allow edge cache warming.
@@ -19,7 +39,10 @@ export const shareToX = async (
   // Pre-warm the Builder route and Open Graph image routes before opening X
   if (targetUrl.startsWith('http')) {
     try {
-      const ogImageUrl = `${targetUrl.replace(/\/$/, '')}/opengraph-image`;
+      const ogImageUrl = targetUrl.includes('?img=')
+        ? targetUrl.replace(/\/builder\/d\/([^?]+)\?img=([^&]+)/, '/api/share/image/$2')
+        : `${targetUrl.replace(/\/$/, '')}/opengraph-image`;
+
       await Promise.all([
         fetch(targetUrl, { mode: 'no-cors', cache: 'no-store' }),
         fetch(ogImageUrl, { mode: 'no-cors', cache: 'no-store' }),

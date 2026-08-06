@@ -5,11 +5,14 @@ import { BuilderCardView } from './BuilderCardView';
 
 interface Props {
   params: Promise<{ payload: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const resolvedParams = await params;
+  const resolvedSearch = await searchParams;
   const rawPayload = resolvedParams.payload || '';
+  const imgParam = typeof resolvedSearch.img === 'string' ? resolvedSearch.img : undefined;
 
   let builderName = 'Verified Builder';
   let builderRole = 'Hacker';
@@ -27,8 +30,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const baseUrlStr = getDynamicBaseUrl();
   const baseUrl = new URL(baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`);
-  const canonicalUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/d/${rawPayload}`;
-  const ogImageUrl = `${canonicalUrl}/opengraph-image`;
+  const canonicalUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/d/${rawPayload}${imgParam ? `?img=${imgParam}` : ''}`;
+  
+  const ogImageUrl = imgParam
+    ? `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}api/share/image/${imgParam}`
+    : `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/d/${rawPayload}/opengraph-image`;
 
   const title = `Hacker House Goa 2026 — ${builderName} (${builderRole})`;
   const description = `Official Hacker House Goa 2026 Digital Identity Credential for ${builderName} [ID: ${builderId}].`;
