@@ -1,20 +1,18 @@
+import type { ImageMetadata } from '../engine/image/aspectRatio';
+
 export type AppStep =
   | 'LANDING'
   | 'UPLOAD'
   | 'DETAILS'
-  | 'GENERATE'
   | 'PREVIEW'
   | 'DOWNLOAD'
   | 'SHARE';
-
-export type AspectRatioType = 'square' | 'portrait' | 'landscape';
 
 export interface ImageUploadData {
   file: File | null;
   previewUrl: string | null;
   fileName: string | null;
-  aspectRatio: AspectRatioType | null;
-  dimensions: { width: number; height: number } | null;
+  meta: ImageMetadata | null;
 }
 
 export interface BuilderDetailsFormData {
@@ -25,9 +23,9 @@ export interface BuilderDetailsFormData {
   techStack?: string;
 }
 
-export interface CardThemeOptions {
-  backgroundPreset: 'sunset' | 'emerald' | 'cyber' | 'minimal';
-  badgeStyle: 'hacker' | 'vip' | 'builder';
+export interface GeneratedCardData {
+  dataUrl: string | null;
+  blob: Blob | null;
 }
 
 export interface BuilderContextType {
@@ -35,18 +33,17 @@ export interface BuilderContextType {
   setStep: (step: AppStep) => void;
   goToNextStep: () => void;
   goToPrevStep: () => void;
-  
+
   imageData: ImageUploadData;
-  setImageData: React.Dispatch<React.SetStateAction<ImageUploadData>>;
-  setUploadedFile: (file: File) => void;
+  setUploadedFile: (file: File) => Promise<void>;
   clearImage: () => void;
 
   builderData: BuilderDetailsFormData;
   setBuilderData: React.Dispatch<React.SetStateAction<BuilderDetailsFormData>>;
   updateBuilderDetails: (details: Partial<BuilderDetailsFormData>) => void;
 
-  themeOptions: CardThemeOptions;
-  setThemeOptions: React.Dispatch<React.SetStateAction<CardThemeOptions>>;
-  
+  generatedCard: GeneratedCardData;
+  setGeneratedCard: React.Dispatch<React.SetStateAction<GeneratedCardData>>;
+
   resetFlow: () => void;
 }
