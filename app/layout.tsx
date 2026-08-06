@@ -6,6 +6,11 @@ import { BuilderProvider } from '../src/context/BuilderContext';
 export const metadata: Metadata = {
   title: 'Hacker House Goa 2026 — Digital Builder Identity',
   description: 'Generate, verify, and share your official Hacker House Goa 2026 Digital Builder Passport.',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Hacker House Goa 2026 — Verified Builder Passport',
     description: 'Official Hacker House Goa 2026 Digital Identity Credential.',
