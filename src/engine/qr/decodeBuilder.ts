@@ -2,7 +2,7 @@ import { validateBuilderPayload, type BuilderPayloadSchema } from './validation'
 
 /**
  * Decodes a URL-safe Base64 string back into a JS object.
- * Returns null if string decoding or JSON parsing fails.
+ * Supports universal decoding across Browser, Node.js, and Vercel Edge Runtimes.
  */
 export const decodeBase64ToPayload = (base64UrlSafeStr: string): unknown => {
   try {
@@ -10,6 +10,11 @@ export const decodeBase64ToPayload = (base64UrlSafeStr: string): unknown => {
     let base64 = base64UrlSafeStr.replace(/-/g, '+').replace(/_/g, '/');
     while (base64.length % 4 !== 0) {
       base64 += '=';
+    }
+
+    if (typeof Buffer !== 'undefined') {
+      const jsonStr = Buffer.from(base64, 'base64').toString('utf-8');
+      return JSON.parse(jsonStr);
     }
 
     const binary = atob(base64);
