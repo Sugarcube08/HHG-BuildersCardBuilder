@@ -3,7 +3,10 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { BuilderProvider } from '../src/context/BuilderContext';
 
+const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://hackerhousegoa2026.dev';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: 'Hacker House Goa 2026 — Digital Builder Identity',
   description: 'Generate, verify, and share your official Hacker House Goa 2026 Digital Builder Passport.',
   icons: {
@@ -14,16 +17,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Hacker House Goa 2026 — Verified Builder Passport',
     description: 'Official Hacker House Goa 2026 Digital Identity Credential.',
-    url: 'https://hackerhousegoa2026.dev',
+    url: baseUrl,
     siteName: 'Hacker House Goa 2026',
-    images: [
-      {
-        url: 'https://hackerhousegoa2026.dev/og-preview.png',
-        width: 1200,
-        height: 630,
-        alt: 'Hacker House Goa 2026 Builder Passport',
-      },
-    ],
     locale: 'en_US',
     type: 'website',
   },
@@ -31,7 +26,6 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Hacker House Goa 2026 — Verified Builder Passport',
     description: 'Official Hacker House Goa 2026 Digital Identity Credential.',
-    images: ['https://hackerhousegoa2026.dev/og-preview.png'],
   },
 };
 

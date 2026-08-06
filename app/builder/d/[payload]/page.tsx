@@ -25,13 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
   }
 
-  const baseUrl = getDynamicBaseUrl();
-  const canonicalUrl = `${baseUrl}builder/d/${rawPayload}`;
+  const baseUrlStr = getDynamicBaseUrl();
+  const baseUrl = new URL(baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`);
+  const canonicalUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/d/${rawPayload}`;
 
   const title = `Hacker House Goa 2026 — ${builderName} (${builderRole})`;
   const description = `Official Hacker House Goa 2026 Digital Identity Credential for ${builderName} [ID: ${builderId}].`;
 
   return {
+    metadataBase: baseUrl,
     title,
     description,
     keywords: ['Hacker House Goa', 'Builder Passport', 'Web3 Identity', 'Goa 2026', builderRole],
