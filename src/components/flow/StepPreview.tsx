@@ -55,7 +55,7 @@ export const StepPreview: React.FC = () => {
   };
 
   const handleShare = () => {
-    shareToX(builderData.fullName, builderData.role);
+    shareToX(builderData.fullName, builderData.role, builderId, qrUrl);
     setStep('SHARE');
   };
 

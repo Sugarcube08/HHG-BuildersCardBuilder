@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import type { BuilderDetailsFormData, ImageUploadData } from '../../types/builder';
 import { getCardTheme } from '../../engine/theme/cardComposer';

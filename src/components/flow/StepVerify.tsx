@@ -48,7 +48,7 @@ export const StepVerify: React.FC = () => {
   };
 
   const handleShare = () => {
-    shareToX(builderData.fullName, builderData.role);
+    shareToX(builderData.fullName, builderData.role, builderId, shareUrl);
   };
 
   return (

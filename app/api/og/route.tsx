@@ -5,6 +5,19 @@ import { getCardTheme } from '../../../src/engine/theme/cardComposer';
 
 export const runtime = 'edge';
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+};
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -165,11 +178,13 @@ export async function GET(request: Request) {
       {
         width: 1200,
         height: 630,
+        headers: corsHeaders,
       }
     );
   } catch (e: any) {
     return new Response(`Failed to generate Open Graph image`, {
       status: 500,
+      headers: corsHeaders,
     });
   }
 }
