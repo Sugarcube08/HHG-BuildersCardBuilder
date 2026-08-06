@@ -1,13 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useBuilder } from '../../context/BuilderContext';
 import { APP_STEPS, STEP_ORDER } from '../../constants/steps';
 import { Check } from 'lucide-react';
 
 export const StepTracker: React.FC = () => {
   const { currentStep, setStep } = useBuilder();
-  const currentIndex = STEP_ORDER.indexOf(currentStep);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const currentIndex = mounted ? STEP_ORDER.indexOf(currentStep) : 0;
 
   return (
     <nav aria-label="Progress" className="w-full bg-[#FAF7F2] border-b-2 border-[#0F172A]/10 py-4 px-4 sm:px-6 select-none">
@@ -32,6 +38,7 @@ export const StepTracker: React.FC = () => {
             return (
               <button
                 key={step.id}
+                type="button"
                 onClick={() => isClickable && setStep(step.id)}
                 disabled={!isClickable}
                 aria-current={isCurrent ? 'step' : undefined}
