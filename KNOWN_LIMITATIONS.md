@@ -31,7 +31,41 @@ Within the constraints of a client-side web application using standard browser A
 
 ---
 
-## 3. Framework Independence
+## 3. Defensible Architecture: The "Download & Share on X" Workflow
+
+Rather than fighting browser security or omitting sharing entirely, we optimize the workflow modern browsers actually support. We minimize user effort by automating every single supported step:
+
+```text
+User clicks "Download & Share on X"
+        │
+        ▼
+Generate 3x Retina Builder Passport PNG
+        │
+        ▼
+Automatically Download Passport PNG ([Name]_HH_Goa_2026_Builder_Passport.png)
+        │
+        ▼
+Wait ~400ms (Ensures download initiation before focus switch)
+        │
+        ▼
+Open X Compose Intent with pre-filled caption & isolated verification URL
+        │
+        ▼
+Display Instructional Feedback Modal
+("Attach your downloaded image to complete your post")
+```
+
+### Why This Solution is Defensible & Honest
+
+If asked:
+> *"Why isn't the image automatically attached in X's tweet box?"*
+
+Our technical answer is:
+> *"Modern web browsers intentionally prevent any website from programmatically injecting local files into another website's compose interface to protect user privacy. Within standard browser constraints, we automated every supported action (3x Retina asset rendering, file download, caption formatting, link isolation, and hashtag injection) and reduced the remaining manual interaction to a single image attachment step."*
+
+---
+
+## 4. Framework Independence
 
 This constraint is **inherent to the Web Platform and Browser Security Architecture**. It is **not** caused by React, Next.js, or any specific frontend technology.
 
@@ -49,7 +83,7 @@ Changing web frameworks or UI libraries does not unlock permissions to bypass br
 
 ---
 
-## 4. Approaches Intentionally Excluded
+## 5. Approaches Intentionally Excluded
 
 To ensure strict adherence to web standards, backend-free deployment requirements, privacy guarantees, and open-source hackathon rules, the following approaches were **intentionally excluded**:
 
@@ -62,40 +96,19 @@ To ensure strict adherence to web standards, backend-free deployment requirement
 
 ---
 
-## 5. Current Standards-Compliant Workflow
+## 6. Pre-filled X Post Caption Format
 
-To achieve production-quality sharing within standard web security boundaries, the application implements the following optimized architecture:
+The pre-filled X post caption is structured to isolate the URL on its own line for maximum readability and automatic card preview generation:
 
+```text
+🚀 I just generated my official Hacker House Goa 2026 Builder Passport!
+
+👤 Harsh Raikwar
+💻 Full Stack Developer
+
+📍 Verify my Builder Profile:
+
+https://your-domain.com/builder/d/xxxx
+
+#FrameInGoa #HHGoa2026 #HackerHouseGoa
 ```
-Builder Generation
-       │
-       ▼
-Builder Card Rendering
-       │
-       ▼
-High-Resolution PNG Export (html-to-image 3x)
-       │
-       ▼
-QR Code Generation
-       │
-       ▼
-Canonical Builder URL & Route (/builder/d/<payload>)
-       │
-       ▼
-Dynamic Server Metadata (generateMetadata)
-       │
-       ▼
-Open Graph & Twitter Card Image Generation (opengraph-image.tsx)
-       │
-       ▼
-X Web Intent Execution (&url= parameter)
-       │
-       ▼
-Rich Social Preview Rendering on X
-```
-
-### User Experience
-
-1. **Instant Download**: Clicking **"Download Passport"** captures the exact 3x Retina PNG directly to the user's device.
-2. **One-Click Share**: Clicking **"Share on X"** opens the pre-filled Twitter composer referencing the canonical Builder URL (`/builder/d/<payload>`).
-3. **Rich Preview Automation**: When the tweet is posted on X, X's web crawler fetches the page's `<meta property="og:image">` and `<meta name="twitter:image">` tags, rendering the high-resolution Builder Passport preview card automatically.

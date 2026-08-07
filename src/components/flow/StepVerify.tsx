@@ -7,9 +7,10 @@ import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { generateQrDataUrl } from '../../engine/qr/generateQr';
 import { exportBuilderCard } from '../../engine/export/exportBuilderCard';
-import { shareToX } from '../../engine/export/share';
+import { downloadAndShareToX } from '../../engine/export/share';
 import { BuilderCard } from '../BuilderCard/BuilderCard';
 import { ExportBoundary } from '../BuilderCard/ExportBoundary';
+import { ShareFeedbackModal } from '../common/ShareFeedbackModal';
 import { Download, Share2, CheckCircle2, ShieldCheck, PlusCircle } from 'lucide-react';
 
 export const StepVerify: React.FC = () => {
@@ -18,6 +19,8 @@ export const StepVerify: React.FC = () => {
   const exportRef = useRef<HTMLDivElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isPreparingShare, setIsPreparingShare] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -35,7 +38,7 @@ export const StepVerify: React.FC = () => {
   }, [qrUrl]);
 
   const handleDownload = async () => {
-    if (isExporting || !exportRef.current) return;
+    if (isExporting || isPreparingShare || !exportRef.current) return;
     setIsExporting(true);
 
     try {
@@ -47,8 +50,24 @@ export const StepVerify: React.FC = () => {
     }
   };
 
-  const handleShare = () => {
-    shareToX(builderData.fullName, builderData.role, builderId, shareUrl);
+  const handleDownloadAndShare = async () => {
+    if (isExporting || isPreparingShare || !exportRef.current) return;
+    setIsPreparingShare(true);
+
+    try {
+      await downloadAndShareToX(
+        exportRef.current,
+        builderData.fullName,
+        builderData.role,
+        builderId,
+        shareUrl
+      );
+      setIsShareModalOpen(true);
+    } catch (err) {
+      console.error('Download & Share workflow failed:', err);
+    } finally {
+      setIsPreparingShare(false);
+    }
   };
 
   return (
@@ -84,7 +103,7 @@ export const StepVerify: React.FC = () => {
       </ExportBoundary>
 
       {/* Public Action Control Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg">
         <Button
           variant="primary"
           onClick={handleDownload}
@@ -97,11 +116,12 @@ export const StepVerify: React.FC = () => {
 
         <Button
           variant="accent"
-          onClick={handleShare}
+          onClick={handleDownloadAndShare}
+          isLoading={isPreparingShare}
           leftIcon={<Share2 className="w-4 h-4 text-white" />}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-auto font-bold"
         >
-          Share on X
+          {isPreparingShare ? 'Preparing X Post...' : 'Download & Share on X'}
         </Button>
 
         <Button
@@ -128,6 +148,16 @@ export const StepVerify: React.FC = () => {
           <span className="font-bold text-[#0B3B2B] truncate max-w-[240px]">{shareUrl}</span>
         </div>
       </Card>
+
+      {/* Share Feedback Instruction Modal */}
+      <ShareFeedbackModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        fullName={builderData.fullName}
+        role={builderData.role}
+        builderId={builderId}
+        shareUrl={shareUrl}
+      />
     </div>
   );
 };

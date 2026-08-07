@@ -2,8 +2,9 @@ import React from 'react';
 import type { Metadata } from 'next';
 import './globals.css';
 import { BuilderProvider } from '../src/context/BuilderContext';
+import { getDynamicBaseUrl } from '../src/engine/share/payload';
 
-const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://hackerhousegoa2026.dev';
+const baseUrl = getDynamicBaseUrl();
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),

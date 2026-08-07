@@ -148,14 +148,25 @@ export const validatePayload = (data: unknown): {
  * Gets the current base URL dynamically from the browser/server environment.
  */
 export const getDynamicBaseUrl = (): string => {
-  const envUrl = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_URL : undefined;
-  if (envUrl && typeof envUrl === 'string' && envUrl.trim().length > 0) {
-    let clean = envUrl.trim();
-    if (!clean.endsWith('/')) clean += '/';
-    return clean;
+  if (typeof process !== 'undefined' && process.env) {
+    const rawEnv =
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      process.env.NEXT_PUBLIC_APP_URL ||
+      process.env.NEXT_PUBLIC_URL ||
+      (process.env.NEXT_PUBLIC_VERCEL_URL ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}` : undefined) ||
+      (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
+    if (rawEnv && typeof rawEnv === 'string' && rawEnv.trim().length > 0) {
+      let clean = rawEnv.trim();
+      if (!clean.startsWith('http://') && !clean.startsWith('https://')) {
+        clean = `https://${clean}`;
+      }
+      if (!clean.endsWith('/')) clean += '/';
+      return clean;
+    }
   }
 
-  if (typeof window !== 'undefined' && window.location) {
+  if (typeof window !== 'undefined' && window.location && window.location.origin) {
     const origin = window.location.origin;
     return origin.endsWith('/') ? origin : `${origin}/`;
   }

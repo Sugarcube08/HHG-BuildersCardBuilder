@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import App from '../../../src/App';
 import { decodeBase64ToPayload } from '../../../src/engine/qr/decodeBuilder';
 import { validateBuilderPayload } from '../../../src/engine/qr/validation';
+import { getDynamicBaseUrl } from '../../../src/engine/share/payload';
 
 interface Props {
   params: Promise<{ builderId: string }>;
@@ -27,7 +28,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     }
   }
 
-  const baseUrlStr = process.env.NEXT_PUBLIC_URL || 'https://hackerhousegoa2026.dev';
+  const baseUrlStr = getDynamicBaseUrl();
   const baseUrl = new URL(baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`);
   const canonicalUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/${builderId}${builderParam ? `?builder=${builderParam}` : ''}`;
   const ogImageUrl = `${baseUrlStr.endsWith('/') ? baseUrlStr : `${baseUrlStr}/`}builder/${builderId}/opengraph-image${builderParam ? `?builder=${builderParam}` : ''}`;

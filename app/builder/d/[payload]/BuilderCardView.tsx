@@ -8,10 +8,11 @@ import { Card } from '../../../../src/components/common/Card';
 import { Badge } from '../../../../src/components/common/Badge';
 import { generateQrDataUrl } from '../../../../src/engine/qr/generateQr';
 import { exportBuilderCard } from '../../../../src/engine/export/exportBuilderCard';
-import { shareToX } from '../../../../src/engine/export/share';
+import { downloadAndShareToX } from '../../../../src/engine/export/share';
 import { generateBuilderUrl } from '../../../../src/engine/share/payload';
 import { Header } from '../../../../src/components/layout/Header';
 import { Footer } from '../../../../src/components/layout/Footer';
+import { ShareFeedbackModal } from '../../../../src/components/common/ShareFeedbackModal';
 import { Download, Share2, ShieldCheck, PlusCircle, CheckCircle2 } from 'lucide-react';
 
 interface Props {
@@ -32,6 +33,8 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
   const exportRef = useRef<HTMLDivElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isPreparingShare, setIsPreparingShare] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
 
   const builderData = {
     fullName: payload.name,
@@ -73,7 +76,7 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
   }, [canonicalShareUrl]);
 
   const handleDownload = async () => {
-    if (isExporting || !exportRef.current) return;
+    if (isExporting || isPreparingShare || !exportRef.current) return;
     setIsExporting(true);
 
     try {
@@ -85,8 +88,24 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
     }
   };
 
-  const handleShare = () => {
-    shareToX(builderData.fullName, builderData.role, payload.id, canonicalShareUrl);
+  const handleDownloadAndShare = async () => {
+    if (isExporting || isPreparingShare || !exportRef.current) return;
+    setIsPreparingShare(true);
+
+    try {
+      await downloadAndShareToX(
+        exportRef.current,
+        builderData.fullName,
+        builderData.role,
+        payload.id,
+        canonicalShareUrl
+      );
+      setIsShareModalOpen(true);
+    } catch (err) {
+      console.error('Download & Share workflow failed:', err);
+    } finally {
+      setIsPreparingShare(false);
+    }
   };
 
   return (
@@ -126,7 +145,7 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
           </ExportBoundary>
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg">
             <Button
               variant="primary"
               onClick={handleDownload}
@@ -139,11 +158,12 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
 
             <Button
               variant="accent"
-              onClick={handleShare}
+              onClick={handleDownloadAndShare}
+              isLoading={isPreparingShare}
               leftIcon={<Share2 className="w-4 h-4 text-white" />}
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto font-bold"
             >
-              Share on X
+              {isPreparingShare ? 'Preparing X Post...' : 'Download & Share on X'}
             </Button>
 
             <Button
@@ -174,6 +194,16 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
           </Card>
         </div>
       </main>
+
+      {/* Share Feedback Instruction Modal */}
+      <ShareFeedbackModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        fullName={builderData.fullName}
+        role={builderData.role}
+        builderId={payload.id}
+        shareUrl={canonicalShareUrl}
+      />
 
       <Footer />
     </div>

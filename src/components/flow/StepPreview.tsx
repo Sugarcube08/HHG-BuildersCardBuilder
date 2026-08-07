@@ -7,10 +7,11 @@ import { Card } from '../common/Card';
 import { Badge } from '../common/Badge';
 import { generateQrDataUrl } from '../../engine/qr/generateQr';
 import { exportBuilderCard } from '../../engine/export/exportBuilderCard';
-import { shareToX } from '../../engine/export/share';
+import { downloadAndShareToX } from '../../engine/export/share';
 import { BuilderCard } from '../BuilderCard/BuilderCard';
 import { ExportBoundary } from '../BuilderCard/ExportBoundary';
-import { Download, Share2, Edit3, CheckCircle2 } from 'lucide-react';
+import { ShareFeedbackModal } from '../common/ShareFeedbackModal';
+import { Download, Share2, Edit3, CheckCircle2, Sparkles } from 'lucide-react';
 
 export const StepPreview: React.FC = () => {
   const { builderData, imageData, setStep, builderId, qrUrl, isRestoredFromUrl } =
@@ -19,6 +20,8 @@ export const StepPreview: React.FC = () => {
   const exportRef = useRef<HTMLDivElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [isPreparingShare, setIsPreparingShare] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
   const [exportError, setExportError] = useState<string | null>(null);
 
   // Generate QR Data URL for display inside BuilderCard
@@ -37,10 +40,9 @@ export const StepPreview: React.FC = () => {
     };
   }, [qrUrl]);
 
-  // Single Source of Truth Export Action:
-  // Captures the exact BuilderCard DOM node directly from the ExportBoundary ref.
+  // Standalone PNG Download Action
   const handleDownload = async () => {
-    if (isExporting || !exportRef.current) return;
+    if (isExporting || isPreparingShare || !exportRef.current) return;
     setIsExporting(true);
     setExportError(null);
 
@@ -54,9 +56,27 @@ export const StepPreview: React.FC = () => {
     }
   };
 
-  const handleShare = () => {
-    shareToX(builderData.fullName, builderData.role, builderId, qrUrl);
-    setStep('SHARE');
+  // Honest "Download & Share on X" Sequenced Workflow Action
+  const handleDownloadAndShare = async () => {
+    if (isExporting || isPreparingShare || !exportRef.current) return;
+    setIsPreparingShare(true);
+    setExportError(null);
+
+    try {
+      await downloadAndShareToX(
+        exportRef.current,
+        builderData.fullName,
+        builderData.role,
+        builderId,
+        qrUrl
+      );
+      setIsShareModalOpen(true);
+    } catch (err) {
+      console.error('Download & Share workflow failed:', err);
+      setExportError('Preparing post failed. Please try again.');
+    } finally {
+      setIsPreparingShare(false);
+    }
   };
 
   return (
@@ -94,7 +114,7 @@ export const StepPreview: React.FC = () => {
       </ExportBoundary>
 
       {/* Action Control Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg">
         <Button
           variant="outline"
           onClick={() => setStep('DETAILS')}
@@ -116,11 +136,12 @@ export const StepPreview: React.FC = () => {
 
         <Button
           variant="accent"
-          onClick={handleShare}
+          onClick={handleDownloadAndShare}
+          isLoading={isPreparingShare}
           leftIcon={<Share2 className="w-4 h-4 text-white" />}
-          className="w-full sm:w-auto"
+          className="w-full sm:w-auto font-bold"
         >
-          Share to X
+          {isPreparingShare ? 'Preparing X Post...' : 'Download & Share on X'}
         </Button>
       </div>
 
@@ -131,14 +152,22 @@ export const StepPreview: React.FC = () => {
         </Card>
       ) : (
         <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2.5 py-3 px-4">
-          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
+          <Sparkles className="w-4.5 h-4.5 text-amber-500 shrink-0" />
           <span>
-            {isRestoredFromUrl
-              ? '✓ Verified Builder Passport restored from QR code URL payload.'
-              : 'Single source of truth DOM capture: preview and downloaded PNG are 100% identical.'}
+            <strong>Honest 1-Click Sharing:</strong> Downloads your 3x Passport PNG and opens X Compose with your verification link prefilled.
           </span>
         </Card>
       )}
+
+      {/* Share Feedback Instruction Modal */}
+      <ShareFeedbackModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
+        fullName={builderData.fullName}
+        role={builderData.role}
+        builderId={builderId}
+        shareUrl={qrUrl}
+      />
     </div>
   );
 };
