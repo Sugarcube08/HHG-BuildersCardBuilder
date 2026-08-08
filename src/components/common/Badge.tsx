@@ -18,18 +18,18 @@ export const Badge: React.FC<BadgeProps> = ({
   className,
 }) => {
   const variants = {
-    green: 'bg-[#0B3B2B] text-emerald-300 border-[#0F172A]',
-    pink: 'bg-[#FF2E93] text-white border-[#0F172A]',
-    yellow: 'bg-[#FFB800] text-[#0F172A] border-[#0F172A]',
-    dark: 'bg-[#0F172A] text-white border-[#0F172A]',
-    outline: 'bg-white text-[#0F172A] border-[#0F172A]',
+    green: 'bg-[#006B3C] text-[#FFD800] border-[#062319]',
+    pink: 'bg-[#FF0080] text-white border-[#062319]',
+    yellow: 'bg-[#FFD800] text-[#062319] border-[#062319]',
+    dark: 'bg-[#062319] text-[#FFF8E5] border-[#062319]',
+    outline: 'bg-[#FFF8E5] text-[#062319] border-[#062319]',
   };
 
   return (
     <span
       className={twMerge(
         clsx(
-          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider border-2 shadow-xs select-none',
+          'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono-hh font-extrabold uppercase tracking-wider border-2 hh-shadow-sm select-none',
           variants[variant],
           className
         )
@@ -40,3 +40,4 @@ export const Badge: React.FC<BadgeProps> = ({
     </span>
   );
 };
+

@@ -1,70 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Plus+Jakarta+Sans:ital,wght@0,400..900;1,400..900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800;900&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
-    --color-hh-green-dark: #07281e;
-    --color-hh-green: #0b3b2b;
-    --color-hh-green-light: #12543e;
-    --color-hh-green-emerald: #10b981;
-    --color-hh-pink: #ff2e93;
-    --color-hh-pink-hover: #e01f7d;
-    --color-hh-yellow: #ffb800;
-    --color-hh-orange: #f97316;
-    --color-hh-sand: #faf7f2;
-    --color-hh-sand-dark: #f0eae1;
-    --color-hh-ink: #0f172a;
-    --color-hh-slate: #1e293b;
+    --color-hh-green-dark: #042E1F;
+    --color-hh-green: #006B3C;
+    --color-hh-green-light: #00874E;
+    --color-hh-yellow: #FFD800;
+    --color-hh-pink: #FF0080;
+    --color-hh-pink-hover: #E00070;
+    --color-hh-cream: #FFF8E5;
+    --color-hh-cream-dark: #FAF0D4;
+    --color-hh-dark: #062319;
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-sans: 'Plus Jakarta Sans', sans-serif;
   }
 
   body {
-    background-color: var(--color-hh-sand);
-    color: var(--color-hh-ink);
-    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-hh-green-dark);
+    color: var(--color-hh-cream);
+    font-family: var(--font-sans);
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Accessible high-contrast focus rings */
   *:focus-visible {
-    outline: 3px solid #ff2e93 !important;
+    outline: 3px solid var(--color-hh-yellow) !important;
     outline-offset: 2px !important;
   }
 }
 
-/* Custom retro-brutalist pop-shadow utilities */
+/* Custom Editorial Typography Classes */
+.font-serif-editorial {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-display-hh {
+  font-family: 'Syne', sans-serif;
+  text-transform: uppercase;
+}
+
+.font-mono-hh {
+  font-family: 'Space Mono', monospace;
+}
+
+/* Retro-brutalist pop-shadow utilities matching HH Goa visual language */
 .hh-shadow-sm {
-  box-shadow: 2px 2px 0px 0px #0f172a;
+  box-shadow: 2.5px 2.5px 0px 0px #062319;
 }
 
 .hh-shadow-md {
-  box-shadow: 4px 4px 0px 0px #0f172a;
+  box-shadow: 4px 4px 0px 0px #062319;
 }
 
 .hh-shadow-lg {
-  box-shadow: 6px 6px 0px 0px #0f172a;
+  box-shadow: 6px 6px 0px 0px #062319;
 }
 
 .hh-shadow-pink {
-  box-shadow: 4px 4px 0px 0px #ff2e93;
+  box-shadow: 4px 4px 0px 0px #FF0080;
 }
 
 .hh-shadow-yellow {
-  box-shadow: 4px 4px 0px 0px #ffb800;
+  box-shadow: 4px 4px 0px 0px #FFD800;
+}
+
+.hh-shadow-green {
+  box-shadow: 4px 4px 0px 0px #006B3C;
 }
 
 .hh-card {
-  background-color: #ffffff;
-  border: 2.5px solid #0f172a;
-  border-radius: 1.25rem;
-  box-shadow: 4px 4px 0px 0px #0f172a;
+  background-color: #FFF8E5;
+  color: #062319;
+  border: 3px solid #062319;
+  border-radius: 1rem;
+  box-shadow: 5px 5px 0px 0px #062319;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hh-card:hover {
   transform: translateY(-2px);
-  box-shadow: 6px 6px 0px 0px #0f172a;
+  box-shadow: 7px 7px 0px 0px #062319;
 }
 
 .hh-badge {
@@ -77,10 +97,11 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  border: 1.5px solid #0f172a;
+  border: 2px solid #062319;
+  font-family: 'Space Mono', monospace;
 }
 
-/* Smooth micro-animations for interactive cards */
+/* Floating animation for decorative assets */
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
@@ -98,9 +119,3 @@
   animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Glassmorphic backdrop utility */
-.hh-glass {
-  background: rgba(11, 59, 43, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}

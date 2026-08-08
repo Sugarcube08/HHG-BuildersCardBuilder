@@ -224,7 +224,7 @@ export const composeBuilderCard = async (
   ctx.fillText('VERIFIED BUILDER PASSPORT', layout.footer.leftX, layout.footer.y);
 
   ctx.textAlign = 'right';
-  ctx.fillText('GOA, INDIA • MARCH 2026', layout.footer.rightX, layout.footer.y);
+  ctx.fillText('GOA, INDIA • OCTOBER 2026', layout.footer.rightX, layout.footer.y);
 
   // Export Canvas to Blob & Data URL with memory cleanup
   return new Promise((resolve, reject) => {

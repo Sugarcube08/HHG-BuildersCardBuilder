@@ -74,20 +74,20 @@ export const StepVerify: React.FC = () => {
     <div className="flex flex-col items-center gap-8 max-w-xl mx-auto text-center">
       {/* Official Credential Header */}
       <div className="flex flex-col gap-3 items-center w-full">
-        <div className="flex items-center justify-center gap-2">
-          <Badge variant="green" icon={<ShieldCheck className="w-4 h-4 text-emerald-600" />}>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Badge variant="green" icon={<ShieldCheck className="w-4 h-4 text-[#FFD800]" />}>
             ✓ Official Verified Credential
           </Badge>
-          <Badge variant="yellow" className="font-mono">
+          <Badge variant="yellow" className="font-mono-hh">
             {builderId}
           </Badge>
         </div>
 
-        <h2 className="text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-serif-editorial font-black text-[#FFF8E5] tracking-tight">
           Hacker House Builder Passport
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-md">
+        <p className="text-xs sm:text-sm text-[#FFF8E5]/90 font-sans max-w-md">
           This digital identity was verified on-chain and registered for Hacker House Goa 2026.
         </p>
       </div>
@@ -127,7 +127,7 @@ export const StepVerify: React.FC = () => {
         <Button
           variant="outline"
           onClick={resetFlow}
-          leftIcon={<PlusCircle className="w-4 h-4 text-[#0B3B2B]" />}
+          leftIcon={<PlusCircle className="w-4 h-4 text-[#062319]" />}
           className="w-full sm:w-auto"
         >
           Create Yours
@@ -135,17 +135,17 @@ export const StepVerify: React.FC = () => {
       </div>
 
       {/* Verification Details Box */}
-      <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex flex-col gap-2 p-4 text-left">
-        <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
-          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
+      <Card variant="sand" shadow="sm" className="max-w-md text-xs text-[#062319] flex flex-col gap-2 p-4 text-left bg-[#FFF8E5] border-3 border-[#062319]">
+        <div className="flex items-center gap-2 text-[#006B3C] font-display-hh font-bold text-sm">
+          <CheckCircle2 className="w-4.5 h-4.5 text-[#006B3C] shrink-0" />
           <span>Credential Verification Status</span>
         </div>
-        <p className="text-slate-600 leading-relaxed">
-          Verified Builder Passport issued for <strong className="text-[#0F172A]">{builderData.fullName || 'Builder'}</strong> ({builderData.role}). Valid for official entry and identity verification at Hacker House Goa 2026.
+        <p className="text-[#062319]/80 font-sans leading-relaxed">
+          Verified Builder Passport issued for <strong className="text-[#062319]">{builderData.fullName || 'Builder'}</strong> ({builderData.role}). Valid for official entry and identity verification at Hacker House Goa 2026.
         </p>
-        <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-[11px] font-mono text-slate-500">
+        <div className="pt-2 border-t-2 border-[#062319]/15 flex items-center justify-between text-[11px] font-mono-hh text-[#062319]/70">
           <span>SHARE LINK:</span>
-          <span className="font-bold text-[#0B3B2B] truncate max-w-[240px]">{shareUrl}</span>
+          <span className="font-bold text-[#006B3C] truncate max-w-[240px]">{shareUrl}</span>
         </div>
       </Card>
 
@@ -161,3 +161,4 @@ export const StepVerify: React.FC = () => {
     </div>
   );
 };
+

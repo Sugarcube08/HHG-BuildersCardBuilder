@@ -47,17 +47,17 @@ export const StepDetails: React.FC = () => {
     <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
       {/* Title & Instructions */}
       <div className="flex flex-col gap-2 text-center">
-        <Badge variant="green" className="w-fit mx-auto">
+        <Badge variant="yellow" className="w-fit mx-auto">
           Step 3 of 6
         </Badge>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">Builder Details</h2>
-        <p className="text-xs sm:text-sm text-slate-600 font-medium">
+        <h2 className="text-3xl sm:text-4xl font-serif-editorial font-black text-[#FFF8E5]">Builder Details</h2>
+        <p className="text-xs sm:text-sm text-[#FFF8E5]/90 font-sans">
           Enter your hacker identity details. These will be stylized on your official card.
         </p>
       </div>
 
       {/* Form Card */}
-      <Card variant="default" shadow="lg" className="w-full p-6 sm:p-8">
+      <Card variant="default" shadow="yellow" className="w-full p-6 sm:p-8 bg-[#FFF8E5] border-3 border-[#062319]">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           {/* Full Name Input */}
           <Input
@@ -81,16 +81,16 @@ export const StepDetails: React.FC = () => {
               {...register('role', { required: 'Role is required' })}
             />
             <div className="flex flex-wrap gap-1.5 pt-1">
-              <span className="text-[11px] font-bold text-slate-500 mr-1 self-center">Presets:</span>
+              <span className="text-[11px] font-mono-hh font-bold text-[#062319]/70 mr-1 self-center">Presets:</span>
               {PRESET_ROLES.map((role) => (
                 <button
                   type="button"
                   key={role}
                   onClick={() => handleRoleSelect(role)}
-                  className={`text-[11px] px-2.5 py-1 rounded-lg border font-semibold transition-all ${
+                  className={`text-[11px] px-2.5 py-1 rounded-lg border-2 font-mono-hh font-bold transition-all ${
                     selectedRole === role
-                      ? 'bg-[#0B3B2B] text-white border-[#0F172A]'
-                      : 'bg-slate-100 text-slate-700 border-slate-300 hover:bg-slate-200'
+                      ? 'bg-[#FFD800] text-[#062319] border-[#062319] hh-shadow-sm'
+                      : 'bg-[#FFF8E5] text-[#062319] border-[#062319]/30 hover:bg-[#FAF0D4]'
                   }`}
                 >
                   {role}
@@ -102,15 +102,15 @@ export const StepDetails: React.FC = () => {
           {/* Dynamic Tagline Input & Generator */}
           <div className="flex flex-col gap-2 text-left">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold uppercase tracking-wider text-[#0F172A]">
+              <label className="text-xs font-mono-hh font-extrabold uppercase tracking-wider text-[#062319]">
                 Builder Motto / Tagline *
               </label>
               <button
                 type="button"
                 onClick={handleAutoTagline}
-                className="text-xs font-bold text-[#FF2E93] hover:underline flex items-center gap-1"
+                className="text-xs font-mono-hh font-bold text-[#FF0080] hover:underline flex items-center gap-1"
               >
-                <Wand2 className="w-3 h-3" /> Auto Generate
+                <Wand2 className="w-3.5 h-3.5" /> Auto Generate
               </button>
             </div>
             <Input
@@ -138,7 +138,7 @@ export const StepDetails: React.FC = () => {
           />
 
           {/* Navigation Action Buttons */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+          <div className="flex items-center justify-between pt-4 border-t-2 border-[#062319]/15">
             <Button
               type="button"
               variant="ghost"
@@ -162,3 +162,4 @@ export const StepDetails: React.FC = () => {
     </div>
   );
 };
+

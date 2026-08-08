@@ -155,22 +155,9 @@ export default async function Image({
         </div>
 
         {/* Footer */}
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderTop: '2px solid #12543E',
-            paddingTop: '20px',
-            fontSize: '20px',
-            fontWeight: '700',
-            fontFamily: 'monospace',
-            color: '#6EE7B7',
-          }}
-        >
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', borderTop: '2px solid #12543E', paddingTop: '20px', fontSize: '20px', fontWeight: '700', fontFamily: 'monospace', color: '#6EE7B7' }}>
           <span>✓ VERIFIED DIGITAL PASSPORT</span>
-          <span style={{ color: '#FFFFFF' }}>GOA, INDIA • MARCH 2026</span>
+          <span style={{ color: '#FFFFFF' }}>GOA, INDIA • OCTOBER 2026</span>
         </div>
       </div>
     ),

@@ -109,27 +109,27 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-[#0F172A] relative selection:bg-[#FF2E93] selection:text-white">
+    <div className="min-h-screen flex flex-col bg-[#042E1F] text-[#FFF8E5] relative selection:bg-[#FF0080] selection:text-white">
       <Header />
 
       <main className="flex-1 py-8 sm:py-12 px-4 sm:px-6">
         <div className="max-w-xl mx-auto flex flex-col items-center gap-8 text-center">
           {/* Header */}
           <div className="flex flex-col gap-3 items-center w-full">
-            <div className="flex items-center justify-center gap-2">
-              <Badge variant="green" icon={<ShieldCheck className="w-4 h-4 text-emerald-400" />}>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <Badge variant="green" icon={<ShieldCheck className="w-4 h-4 text-[#FFD800]" />}>
                 ✓ Official Verified Credential
               </Badge>
-              <Badge variant="yellow" className="font-mono">
+              <Badge variant="yellow" className="font-mono-hh">
                 {payload.id}
               </Badge>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight">
+            <h1 className="text-3xl sm:text-4xl font-serif-editorial font-black text-[#FFF8E5] tracking-tight">
               Hacker House Builder Passport
             </h1>
 
-            <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-md">
+            <p className="text-xs sm:text-sm text-[#FFF8E5]/90 font-sans max-w-md">
               Verified Digital Passport for {builderData.fullName} ({builderData.role}).
             </p>
           </div>
@@ -171,7 +171,7 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
               onClick={() => {
                 window.location.href = '/';
               }}
-              leftIcon={<PlusCircle className="w-4 h-4 text-[#0B3B2B]" />}
+              leftIcon={<PlusCircle className="w-4 h-4 text-[#062319]" />}
               className="w-full sm:w-auto"
             >
               Create Yours
@@ -179,17 +179,17 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
           </div>
 
           {/* Verification Box */}
-          <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex flex-col gap-2 p-4 text-left">
-            <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
-              <CheckCircle2 className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
+          <Card variant="sand" shadow="sm" className="max-w-md text-xs text-[#062319] flex flex-col gap-2 p-4 text-left bg-[#FFF8E5] border-3 border-[#062319]">
+            <div className="flex items-center gap-2 text-[#006B3C] font-display-hh font-bold text-sm">
+              <CheckCircle2 className="w-4.5 h-4.5 text-[#006B3C] shrink-0" />
               <span>Credential Verification Status</span>
             </div>
-            <p className="text-slate-600 leading-relaxed">
-              Verified Builder Passport issued for <strong className="text-[#0F172A]">{builderData.fullName}</strong> ({builderData.role}). Valid for official entry and identity verification at Hacker House Goa 2026.
+            <p className="text-[#062319]/80 font-sans leading-relaxed">
+              Verified Builder Passport issued for <strong className="text-[#062319]">{builderData.fullName}</strong> ({builderData.role}). Valid for official entry and identity verification at Hacker House Goa 2026.
             </p>
-            <div className="pt-2 border-t border-amber-200/80 flex items-center justify-between text-[11px] font-mono text-slate-500">
+            <div className="pt-2 border-t-2 border-[#062319]/15 flex items-center justify-between text-[11px] font-mono-hh text-[#062319]/70">
               <span>SHARE LINK:</span>
-              <span className="font-bold text-[#0B3B2B] truncate max-w-[240px]">{canonicalShareUrl}</span>
+              <span className="font-bold text-[#006B3C] truncate max-w-[240px]">{canonicalShareUrl}</span>
             </div>
           </Card>
         </div>
@@ -209,3 +209,4 @@ export const BuilderCardView: React.FC<Props> = ({ payload }) => {
     </div>
   );
 };
+

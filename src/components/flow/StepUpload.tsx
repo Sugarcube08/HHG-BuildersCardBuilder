@@ -39,11 +39,11 @@ export const StepUpload: React.FC = () => {
     <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto text-center">
       {/* Title & Instructions */}
       <div className="flex flex-col gap-2">
-        <Badge variant="green" className="w-fit mx-auto">
+        <Badge variant="yellow" className="w-fit mx-auto">
           Step 2 of 6
         </Badge>
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">Upload Your Photo</h2>
-        <p className="text-xs sm:text-sm text-slate-600 font-medium">
+        <h2 className="text-3xl sm:text-4xl font-serif-editorial font-black text-[#FFF8E5]">Upload Your Photo</h2>
+        <p className="text-xs sm:text-sm text-[#FFF8E5]/90 font-sans">
           Select a photo to feature on your HH Goa 2026 card. Square, portrait, or landscape are all supported with zero auto-cropping.
         </p>
       </div>
@@ -51,13 +51,13 @@ export const StepUpload: React.FC = () => {
       {/* Main Upload Dropzone or Image Preview */}
       <Card
         variant="default"
-        shadow="lg"
-        className={`w-full p-8 border-dashed border-3 transition-all ${
+        shadow="yellow"
+        className={`w-full p-8 border-3 border-dashed transition-all bg-[#FFF8E5] border-[#062319] ${
           isDragging
-            ? 'border-[#FF2E93] bg-pink-50/50 scale-[1.01]'
+            ? 'border-[#FF0080] bg-[#FFFDF5] scale-[1.01]'
             : imageData.previewUrl
-            ? 'border-[#0B3B2B] bg-emerald-50/20'
-            : 'border-slate-300 hover:border-[#0B3B2B]'
+            ? 'border-[#006B3C]'
+            : 'hover:border-[#FF0080]'
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -78,12 +78,12 @@ export const StepUpload: React.FC = () => {
               <img
                 src={imageData.previewUrl}
                 alt="Uploaded preview"
-                className="max-h-64 rounded-xl border-2 border-[#0F172A] object-contain shadow-md"
+                className="max-h-64 rounded-xl border-3 border-[#062319] object-contain hh-shadow-md"
               />
               {imageData.meta && (
                 <Badge
                   variant="dark"
-                  className="absolute top-2 right-2 text-[10px] lowercase font-mono bg-[#0F172A]/90 text-white"
+                  className="absolute top-2 right-2 text-[10px] lowercase font-mono-hh bg-[#062319] text-[#FFF8E5]"
                 >
                   {imageData.meta.orientation} ({imageData.meta.width}×{imageData.meta.height} • {imageData.meta.ratio.toFixed(2)})
                 </Badge>
@@ -91,11 +91,11 @@ export const StepUpload: React.FC = () => {
             </div>
 
             <div className="flex flex-col items-center gap-1">
-              <p className="text-sm font-bold text-[#0B3B2B] flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <p className="text-sm font-display-hh font-bold text-[#006B3C] flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#006B3C]" />
                 <span>Photo Loaded Successfully</span>
               </p>
-              <p className="text-xs text-slate-500 font-mono">{imageData.fileName}</p>
+              <p className="text-xs text-[#062319]/70 font-mono-hh">{imageData.fileName}</p>
             </div>
 
             {/* Replace Button */}
@@ -113,15 +113,15 @@ export const StepUpload: React.FC = () => {
             onClick={() => fileInputRef.current?.click()}
             className="flex flex-col items-center gap-4 cursor-pointer py-6"
           >
-            <div className="w-16 h-16 rounded-2xl bg-[#FAF7F2] border-2 border-[#0F172A] flex items-center justify-center text-[#FF2E93] hh-shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-16 h-16 rounded-2xl bg-[#FFD800] border-3 border-[#062319] flex items-center justify-center text-[#062319] hh-shadow-sm group-hover:scale-105 transition-transform">
               <UploadCloud className="w-8 h-8" />
             </div>
 
             <div className="flex flex-col gap-1">
-              <p className="text-base font-extrabold text-[#0F172A]">
-                Drag & Drop photo here, or <span className="text-[#FF2E93] underline">Browse</span>
+              <p className="text-base font-display-hh font-extrabold text-[#062319]">
+                Drag & Drop photo here, or <span className="text-[#FF0080] underline">Browse</span>
               </p>
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="text-xs text-[#062319]/80 font-medium font-sans">
                 Supports JPG, PNG, WebP • Up to 10MB
               </p>
             </div>
@@ -152,7 +152,7 @@ export const StepUpload: React.FC = () => {
         </Button>
 
         <Button
-          variant="primary"
+          variant="accent"
           size="lg"
           onClick={() => setStep('DETAILS')}
           disabled={!imageData.previewUrl}
@@ -164,3 +164,4 @@ export const StepUpload: React.FC = () => {
     </div>
   );
 };
+

@@ -60,25 +60,25 @@ export const getCardTheme = (role: string = ''): CardThemeConfig => {
   let roleBadgeText: string = Theme.colors.ink;
 
   if (normalized.includes('frontend') || normalized.includes('ui') || normalized.includes('ux') || normalized.includes('design')) {
-    accentColor = '#FF2E93';
-    bannerColor = '#FF2E93';
-    roleBadgeBg = '#FF2E93';
-    roleBadgeText = '#FFFFFF';
+    accentColor = '#FF0080';
+    bannerColor = '#FF0080';
+    roleBadgeBg = '#FF0080';
+    roleBadgeText = '#FFF8E5';
   } else if (normalized.includes('backend') || normalized.includes('api') || normalized.includes('devops')) {
-    accentColor = '#10B981';
-    bannerColor = '#10B981';
-    roleBadgeBg = '#10B981';
-    roleBadgeText = '#0F172A';
+    accentColor = '#00874E';
+    bannerColor = '#00874E';
+    roleBadgeBg = '#00874E';
+    roleBadgeText = '#FFF8E5';
   } else if (normalized.includes('ai') || normalized.includes('ml') || normalized.includes('data')) {
-    accentColor = '#A855F7';
-    bannerColor = '#A855F7';
-    roleBadgeBg = '#A855F7';
-    roleBadgeText = '#FFFFFF';
+    accentColor = '#FF0080';
+    bannerColor = '#FF0080';
+    roleBadgeBg = '#FF0080';
+    roleBadgeText = '#FFF8E5';
   } else if (normalized.includes('smart contract') || normalized.includes('web3') || normalized.includes('blockchain') || normalized.includes('solana')) {
-    accentColor = '#F97316';
-    bannerColor = '#F97316';
-    roleBadgeBg = '#F97316';
-    roleBadgeText = '#FFFFFF';
+    accentColor = '#FFD800';
+    bannerColor = '#FFD800';
+    roleBadgeBg = '#FFD800';
+    roleBadgeText = '#062319';
   }
 
   return {

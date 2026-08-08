@@ -82,11 +82,11 @@ export default async function BuilderPayloadPage({ params }: Props) {
 
   if (!validated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2] p-4 text-center">
-        <div className="bg-white p-8 rounded-2xl border-2.5 border-[#0F172A] hh-shadow-md max-w-md">
-          <h2 className="text-xl font-bold text-[#0F172A] mb-2">Invalid Builder Passport Link</h2>
-          <p className="text-sm text-slate-600 mb-4">The shared payload URL is invalid or corrupted.</p>
-          <a href="/" className="inline-block bg-[#0B3B2B] text-white px-5 py-2.5 rounded-xl font-extrabold text-sm border-2 border-[#0F172A]">
+      <div className="min-h-screen flex items-center justify-center bg-[#042E1F] p-4 text-center">
+        <div className="bg-[#FFF8E5] p-8 rounded-2xl border-3 border-[#062319] hh-shadow-yellow max-w-md text-[#062319]">
+          <h2 className="text-xl font-serif-editorial font-bold text-[#062319] mb-2">Invalid Builder Passport Link</h2>
+          <p className="text-sm text-[#062319]/80 font-sans mb-5">The shared payload URL is invalid or corrupted.</p>
+          <a href="/" className="inline-block bg-[#006B3C] text-[#FFF8E5] px-6 py-3 rounded-xl font-display-hh font-extrabold text-sm border-3 border-[#062319] hh-shadow-sm hover:bg-[#00874E]">
             Create a New Passport
           </a>
         </div>

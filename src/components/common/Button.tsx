@@ -25,25 +25,25 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-extrabold tracking-wide transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none select-none rounded-xl border-2.5 border-[#0F172A] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none';
+    'inline-flex items-center justify-center font-display-hh tracking-wider font-extrabold uppercase transition-all duration-150 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none select-none rounded-xl border-3 border-[#062319] active:translate-x-0.5 active:translate-y-0.5 active:shadow-none';
 
   const variants = {
     primary:
-      'bg-[#0B3B2B] text-white hover:bg-[#12543E] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
-    accent:
-      'bg-[#FF2E93] text-white hover:bg-[#E01F7D] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
+      'bg-[#006B3C] text-[#FFF8E5] hover:bg-[#00874E] hh-shadow-yellow hover:-translate-y-0.5 active:translate-y-0',
     secondary:
-      'bg-[#FFB800] text-[#0F172A] hover:bg-[#E5A400] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
+      'bg-[#FFD800] text-[#062319] hover:bg-[#FFE233] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
+    accent:
+      'bg-[#FF0080] text-white hover:bg-[#E00070] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     outline:
-      'bg-white text-[#0F172A] hover:bg-[#FAF7F2] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
+      'bg-[#FFF8E5] text-[#062319] hover:bg-[#FFFDF5] hh-shadow-md hover:-translate-y-0.5 active:translate-y-0',
     ghost:
-      'bg-transparent text-[#0F172A] hover:bg-slate-200/60 border-transparent active:bg-slate-300/60',
+      'bg-transparent text-[#FFF8E5] border-transparent hover:bg-white/10 hover:border-[#FFD800]/50 active:bg-white/20',
   };
 
   const sizes = {
     sm: 'text-xs px-3.5 py-2 gap-1.5 min-h-[36px]',
     md: 'text-sm px-5 py-2.5 gap-2 min-h-[44px]',
-    lg: 'text-base px-7 py-3.5 gap-2.5 min-h-[52px]',
+    lg: 'text-base sm:text-lg px-7 py-3.5 gap-2.5 min-h-[52px]',
   };
 
   return (
@@ -83,3 +83,4 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+

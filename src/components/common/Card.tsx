@@ -17,11 +17,11 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variants = {
-    default: 'bg-white text-[#0F172A] border-2.5 border-[#0F172A]',
-    emerald: 'bg-[#0B3B2B] text-white border-2.5 border-[#0F172A]',
-    pink: 'bg-[#FF2E93] text-white border-2.5 border-[#0F172A]',
-    sand: 'bg-[#FAF7F2] text-[#0F172A] border-2.5 border-[#0F172A]',
-    glass: 'bg-white/85 backdrop-blur-md text-[#0F172A] border-2.5 border-[#0F172A]',
+    default: 'bg-[#FFF8E5] text-[#062319] border-3 border-[#062319]',
+    emerald: 'bg-[#006B3C] text-[#FFF8E5] border-3 border-[#062319]',
+    pink: 'bg-[#FF0080] text-white border-3 border-[#062319]',
+    sand: 'bg-[#FAF0D4] text-[#062319] border-3 border-[#062319]',
+    glass: 'bg-[#FFF8E5] text-[#062319] border-3 border-[#062319]',
   };
 
   const shadows = {
@@ -44,3 +44,4 @@ export const Card: React.FC<CardProps> = ({
     </div>
   );
 };
+

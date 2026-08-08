@@ -16,20 +16,20 @@ export const BuilderIdentity: React.FC<BuilderIdentityProps> = ({
   return (
     <div className="w-full flex flex-col items-center gap-2 relative z-10 text-center">
       {/* Full Name */}
-      <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase leading-none">
+      <h3 className="text-2xl sm:text-3xl font-serif-editorial font-black text-[#FFF8E5] tracking-tight uppercase leading-none">
         {builderData.fullName || 'HARSH RAIKWAR'}
       </h3>
 
       {/* Role Badge with Role-Personalized Accent Tint */}
       <span
         style={{ backgroundColor: theme.roleBadgeBg, color: theme.roleBadgeText }}
-        className="text-xs font-extrabold uppercase tracking-wider px-4 py-1.5 rounded-full border-2 border-[#0F172A] hh-shadow-sm select-none"
+        className="text-xs font-mono-hh font-extrabold uppercase tracking-wider px-4 py-1.5 rounded-full border-2 border-[#062319] hh-shadow-sm select-none"
       >
         {builderData.role || 'Full Stack Developer'}
       </span>
 
       {/* Stylized Motto */}
-      <p className="text-xs italic text-emerald-200/90 max-w-xs font-medium mt-0.5">
+      <p className="text-xs italic font-serif-editorial text-[#FFD800] max-w-xs font-medium mt-0.5">
         {builderData.tagline || '"The System Architect"'}
       </p>
 
@@ -39,7 +39,7 @@ export const BuilderIdentity: React.FC<BuilderIdentityProps> = ({
           {builderData.techStack.split(',').map((tech, i) => (
             <span
               key={i}
-              className="text-[10px] bg-white/10 text-emerald-200 px-2.5 py-0.5 rounded-md border border-white/10 font-mono font-bold"
+              className="text-[10px] bg-[#042E1F] text-[#FFF8E5] px-2.5 py-0.5 rounded-md border border-[#FFD800]/30 font-mono-hh font-bold"
             >
               {tech.trim()}
             </span>
@@ -48,9 +48,10 @@ export const BuilderIdentity: React.FC<BuilderIdentityProps> = ({
       )}
 
       {/* Builder ID Monospace Badge */}
-      <div className="mt-1 text-xs font-mono font-extrabold text-emerald-300 tracking-wider">
-        BUILDER ID: <span className="text-white">{builderId}</span>
+      <div className="mt-1 text-xs font-mono-hh font-extrabold text-[#FFD800] tracking-wider">
+        BUILDER ID: <span className="text-[#FFF8E5]">{builderId}</span>
       </div>
     </div>
   );
 };
+

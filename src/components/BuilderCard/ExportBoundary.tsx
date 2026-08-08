@@ -16,12 +16,12 @@ export interface ExportBoundaryProps {
 export const ExportBoundary = forwardRef<HTMLDivElement, ExportBoundaryProps>(
   ({ children, className }, ref) => {
     return (
-      <div className="w-full flex justify-center items-center">
+      <div className="w-full flex justify-center items-center overflow-hidden p-1">
         <div
           ref={ref}
           className={twMerge(
             clsx(
-              'w-full max-w-[440px] shrink-0 font-sans text-left transition-transform duration-150',
+              'w-full max-w-[440px] font-sans text-left transition-transform duration-150',
               className
             )
           )}

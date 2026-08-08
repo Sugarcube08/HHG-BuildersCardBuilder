@@ -25,9 +25,9 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({
   const theme = getCardTheme(builderData.role);
 
   return (
-    <div className="bg-[#0B3B2B] text-white border-4 border-[#0F172A] rounded-3xl p-6 sm:p-7 hh-shadow-yellow relative overflow-hidden flex flex-col items-center gap-5 text-center">
+    <div className="bg-[#006B3C] text-[#FFF8E5] border-4 border-[#062319] rounded-3xl p-6 sm:p-7 hh-shadow-yellow relative overflow-hidden flex flex-col items-center gap-5 text-center select-none">
       {/* Decorative Palm Trees Background Overlay */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none mix-blend-overlay">
+      <div className="absolute inset-0 opacity-15 pointer-events-none mix-blend-overlay">
         <img src="/decorations/footer trees.png" alt="Trees background" className="w-full h-full object-cover" />
       </div>
 
@@ -48,3 +48,4 @@ export const BuilderCard: React.FC<BuilderCardProps> = ({
     </div>
   );
 };
+

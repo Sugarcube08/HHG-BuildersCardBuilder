@@ -171,7 +171,7 @@ export async function GET(request: Request) {
             }}
           >
             <span>✓ VERIFIED DIGITAL PASSPORT</span>
-            <span style={{ color: '#FFFFFF' }}>GOA, INDIA • MARCH 2026</span>
+            <span style={{ color: '#FFFFFF' }}>GOA, INDIA • OCTOBER 2026</span>
           </div>
         </div>
       ),

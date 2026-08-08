@@ -83,8 +83,8 @@ export const StepPreview: React.FC = () => {
     <div className="flex flex-col items-center gap-8 max-w-xl mx-auto text-center">
       {/* Page Title & Status */}
       <div className="flex flex-col gap-2.5 items-center w-full">
-        <div className="flex items-center justify-center gap-2">
-          <Badge variant="green" className="w-fit">
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          <Badge variant="yellow" className="w-fit">
             Canonical Digital Passport
           </Badge>
           {isRestoredFromUrl && (
@@ -94,11 +94,11 @@ export const StepPreview: React.FC = () => {
           )}
         </div>
 
-        <h2 className="text-2xl sm:text-4xl font-black text-[#0F172A] tracking-tight">
+        <h2 className="text-3xl sm:text-4xl font-serif-editorial font-black text-[#FFF8E5] tracking-tight">
           Hacker House Builder Passport
         </h2>
 
-        <p className="text-xs sm:text-sm text-slate-600 font-medium max-w-md">
+        <p className="text-xs sm:text-sm text-[#FFF8E5]/90 font-sans max-w-md">
           Single source of truth — your on-screen preview and downloaded PNG are 100% pixel-identical.
         </p>
       </div>
@@ -118,7 +118,7 @@ export const StepPreview: React.FC = () => {
         <Button
           variant="outline"
           onClick={() => setStep('DETAILS')}
-          leftIcon={<Edit3 className="w-4 h-4" />}
+          leftIcon={<Edit3 className="w-4 h-4 text-[#062319]" />}
           className="w-full sm:w-auto"
         >
           Edit Details
@@ -147,13 +147,13 @@ export const StepPreview: React.FC = () => {
 
       {/* Notice Card */}
       {exportError ? (
-        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-rose-600 flex items-center gap-2.5 py-3 px-4 border-rose-500">
+        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-rose-700 flex items-center gap-2.5 py-3 px-4 border-2 border-rose-600 bg-rose-50">
           <span>⚠️ {exportError}</span>
         </Card>
       ) : (
-        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-slate-600 flex items-center gap-2.5 py-3 px-4">
-          <Sparkles className="w-4.5 h-4.5 text-amber-500 shrink-0" />
-          <span>
+        <Card variant="sand" shadow="sm" className="max-w-md text-xs text-[#062319] flex items-center gap-2.5 py-3.5 px-4 bg-[#FFF8E5] border-3 border-[#062319]">
+          <Sparkles className="w-4.5 h-4.5 text-[#FF0080] shrink-0" />
+          <span className="text-left leading-normal font-sans">
             <strong>Honest 1-Click Sharing:</strong> Downloads your 3x Passport PNG and opens X Compose with your verification link prefilled.
           </span>
         </Card>
@@ -171,3 +171,4 @@ export const StepPreview: React.FC = () => {
     </div>
   );
 };
+
